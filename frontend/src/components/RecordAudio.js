@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import QuestionsAudio from './QuestionsAudio'
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition
@@ -12,6 +13,7 @@ function RecordAudio() {
   const [isListening, setIsListening] = useState(false)
   const [note, setNote] = useState(null)
   const [savedNotes, setSavedNotes] = useState([])
+  var [nextQuestion,setNextQuestion]=useState(0)
 
   useEffect(() => {
     handleListen()
@@ -50,20 +52,29 @@ function RecordAudio() {
   const handleSaveNote = () => {
     setSavedNotes([...savedNotes, note])
     setNote('')
+
   }
+
 
   return (
     <>
+    <QuestionsAudio index={nextQuestion}></QuestionsAudio>
       <h1>Voice Notes</h1>
       <div className="container">
         <div className="box">
+            
           <h2>Current Note</h2>
           {isListening ? <span>🎙️</span> : <span>🛑🎙️</span>}
-          <button onClick={handleSaveNote} disabled={!note}>
+          <button onClick={handleSaveNote}disabled={!note}>
             Save Note
           </button>
           <button onClick={() => setIsListening(prevState => !prevState)}>
             Start/Stop
+          </button>
+          <button onClick={()=>setNextQuestion(nextQuestion=>nextQuestion+=1)
+            
+          } disabled={!note}>
+            Next Note
           </button>
           <p>{note}</p>
         </div>
