@@ -1,13 +1,121 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+.profileBackground {
+  position: absolute;
+  width: 270px;
+  height: 221px;
+  left: 0px;
+  top: 0px;
+  background: #000c8e;
+  box-shadow: 4px 7px 4px rgba(0, 0, 0, 0.12);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.profilePicture {
+  position: absolute;
+  width: 101px;
+  height: 108px;
+  left: 78px;
+  top: 40px;
+  border-radius: 50%;
 }
+
+.profileText {
+  position: absolute;
+  width: 116px;
+  height: 25px;
+  left: 74px;
+  top: 150px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+
+  color: #ffffff;
+}
+
+.sideNavBackground {
+  width: 270px;
+  height: 100vh;
+
+  background: #2a36b8;
+  box-shadow: 14px -2px 18px rgba(0, 0, 0, 0.16);
+}
+
+.header {
+  box-sizing: border-box;
+  position: absolute;
+  width: 963px;
+  height: 60px;
+  left: 270px;
+  top: 0px;
+  background: #f8f8f8;
+  border: 1px solid rgba(0, 0, 0, 0.27);
+  box-shadow: 17px 8px 6px rgba(0, 0, 0, 0.1);
+}
+
+.abso{
+
+  position: absolute;
+}
+.headerText {
+  position: relative;
+  width: 149px;
+  height: 21px;
+  left: 50px;
+  top: 20px;
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 21px;
+  /* identical to box height */
+
+  color: #000000;
+}
+
+.dashboard{
+  position: absolute;
+  top:100px;
+  left:320px;
+
+}
+
+.progress{
+
+  width:75%;
+  margin-bottom: 20px;
+}
+.card{
+
+  width: 17rem;
+}
+
+.row{
+
+  margin-top: 20px;
+}
+
+.btn-primary{
+
+  background-color:#2a36b8;
+}
+
+.card-text{
+
+  color:gray;
+}
+
+.table{
+
+
+  width:77%;
+  left:270px;
+  top:80px;
+  position: absolute;
+}
+
