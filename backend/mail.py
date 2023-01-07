@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USERNAME"] = "i190633@nu.edu.pk"
-app.config["MAIL_PASSWORD"] = "/"
+app.config["MAIL_PASSWORD"] = "Metalmgsv@5"
 app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
@@ -17,7 +17,7 @@ mail = Mail(app)
 def hello():
     if request.method == "POST":
         msg = Message(
-            "Hey", sender="noreply@demo.com", recipients=["hasham.chudery786@gmail.com"]
+            "Hey", sender="noreply@demo.com", recipients=["i190633@nu.edu.pk"]
         )
         msg.body = "From my NU id MOmin"
         mail.send(msg)
