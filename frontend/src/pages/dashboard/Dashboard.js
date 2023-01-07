@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import axios from "axios";
 
 export default function Dashboard() {
+  const [jobss, setMyJobs] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:90/jobs").then((res) => {
+      console.log(res);
+      setMyJobs(res.data);
+    });
+  }, []);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -45,6 +54,13 @@ export default function Dashboard() {
       id: new Date().getTime().toString(),
     };
     setJobs([...jobs, job]);
+    axios.post("http://localhost:90/createjobs",{
+      name:job.name,
+      desc:job.desc,
+      skills:job.skills,
+      edu:job.edu,
+      exp:job.exp
+    })
     console.log(jobs);
   };
 
@@ -109,12 +125,33 @@ export default function Dashboard() {
                 id="exp"
               />
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" onClose={handleClose}>Submit</button>
           </form>
         </Box>
       </Modal>
       <div className="create-job btn btn-outline-success" onClick={handleOpen}>
         Create
+      </div>
+      <div className="grid">
+        {jobss.map((post) => {
+          const { name, desc, skills, edu, exp } = post;
+          return (
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{name}</h5>
+                <p class="card-text">
+                  <b>Education</b>: {edu}
+                </p>
+                <p class="card-text">
+                  <b>Skills:</b> {skills}
+                </p>
+                <p className="card-text"><b>Experience:</b> {exp}</p>
+                <button className="btn btn-primary btn-sm">View Candidates</button>
+              </div>
+
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -3,13 +3,15 @@ import pymongo
 from pymongo import MongoClient
 import json
 import dns
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 
 
 from bson.objectid import ObjectId
 
+
 app = Flask(__name__)
-CORS(app)
+
+#CORS(app)
 
 
 try:
@@ -21,10 +23,12 @@ try:
 except:
     print("Couldn't connect to Db")
 
-
-@app.route("/jobs", methods=["POST"])
+@app.route("/createjobs", methods=["POST"])
+@cross_origin()
 def create_job():
     try:
+        print("22")
+        print(request.form)
         job = {
             "name": request.form["name"],
             "desc": request.form["desc"],
@@ -48,6 +52,7 @@ def create_job():
 
 
 @app.route("/jobs", methods=["GET"])
+@cross_origin()
 def get_jobs():
     try:
         job_Data = list(db.jobs.find({"exp": "5"}))
