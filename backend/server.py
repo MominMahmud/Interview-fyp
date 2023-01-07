@@ -56,7 +56,7 @@ def create_job():
 @cross_origin()
 def get_jobs():
     try:
-        job_Data = list(db.jobs.find({"exp": "5"}))
+        job_Data = list(db.jobs.find())
         for job in job_Data:
             job["_id"] = str(job["_id"])
         return Response(
