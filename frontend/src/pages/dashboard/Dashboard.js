@@ -33,6 +33,8 @@ export default function Dashboard() {
   };
 
   const [job, setJob] = useState({
+
+    
     name: "",
     desc: "",
     skills: "",
@@ -134,7 +136,7 @@ export default function Dashboard() {
       </div>
       <div className="grid">
         {jobss.map((post) => {
-          const { name, desc, skills, edu, exp } = post;
+          const { _id,name, desc, skills, edu, exp } = post;
           return (
             <div class="card">
               <div class="card-body">
@@ -146,7 +148,7 @@ export default function Dashboard() {
                   <b>Skills:</b> {skills}
                 </p>
                 <p className="card-text"><b>Experience:</b> {exp}</p>
-                <button className="btn btn-primary btn-sm">View Candidates</button>
+                <a className="btn btn-primary btn-sm" href={'/candidates/?id='+ _id}>View Candidates</a>
               </div>
 
             </div>
