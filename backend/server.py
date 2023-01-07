@@ -1,83 +1,8 @@
-# from flask import Flask, Response, request
-# import pymongo
-# import json
-# from bson.objectid import ObjectId
-
-# app = Flask(__name__)
-
-# ####Connecting to the database
-
-# try:
-#     mongo = pymongo.MongoClient(
-#         host="localhost", port=27017, serverSelectionTimeoutMS=1000
-#     )
-#     db = mongo.fastHiree
-
-#     mongo.server_info()
-# except:
-#     print("Couldn't connect to database")
-
-# ############################
-# @app.route("/jobsS", methods=["GET"])
-# def get_user():
-#     try:
-
-#         data = list(db.jobs.find())
-#         for user in data:
-#             user["_id"] = str(user["_id"])
-#         return Response(
-#             response=json.dumps(data),
-#             status=500,
-#             mimetype="application/json",
-#         )
-
-#     except Exception as ex:
-#         print(ex)
-#         return Response(
-#             response=json.dumps({"message": "Cannot get user"}),
-#             status=500,
-#             mimetype="application/json",
-#         )
-
-
-# id = 1
-# ################################################################
-# @app.route("/jobs", methods=["POST"])
-# def insert_job():
-#     try:
-#         job = {
-#             "name": request.form["name"],
-#             "description": request.form["description"],
-#             "skills": request.form["skills"],
-#         }
-
-#         return "hell"
-
-#         # job = {
-#         #     "name": "Web Developer",
-#         #     "description": "Web Developer required for our company urgent",
-#         # }
-
-#         dbResponse = db.jobs.insert_one(job)
-#         print(dbResponse.inserted_id)
-#         # for attr in dir(dbResponse):
-#         #     print(attr)
-#         return Response(
-#             response=json.dumps(
-#                 {"message": "Job inserted", "id": f"{dbResponse.inserted_id}"}
-#             ),
-#             status=200,
-#             mimetype="application/json",
-#         )
-
-#     except Exception as ex:
-#         print("********************************")
-#         print(ex)
-
-
 from flask import Flask, Response, request
 import pymongo
+from pymongo import MongoClient
 import json
+import dns
 
 from bson.objectid import ObjectId
 
@@ -85,9 +10,9 @@ app = Flask(__name__)
 
 try:
     mongo = pymongo.MongoClient(
-        host="localhost", port=27017, serverSelectionTimeoutMS=1000
+        "mongodb+srv://admin:1234@fyp.dhi0fxe.mongodb.net/test?authMechanism=DEFAULT"
     )
-    db = mongo.fastHire
+    db = mongo["fastHire"]
     mongo.server_info()
 except:
     print("Couldn't connect to Db")
@@ -126,7 +51,7 @@ def get_jobs():
             job["_id"] = str(job["_id"])
         return Response(
             response=json.dumps(job_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -174,7 +99,7 @@ def get_candidates():
             candidate["_id"] = str(candidate["_id"])
         return Response(
             response=json.dumps(candidate_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -226,7 +151,7 @@ def viewspecific_job(apliedfor):
             candidate["_id"] = str(candidate["_id"])
         return Response(
             response=json.dumps(candidate_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -234,6 +159,46 @@ def viewspecific_job(apliedfor):
         print(e)
         return Response(
             response=json.dumps({"message": "Cannot find user appliedfor"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
+@app.route("/questions", methods=["POST"])
+def insert_questions():
+    try:
+        question = {
+            "text": request.form["text"],
+            "category": request.form["category"],
+        }
+        dbResponse = db.questions.insert_one(question)
+        return Response(
+            response=json.dumps(
+                {"message": "Question inserted", "id": f"{dbResponse.inserted_id}"}
+            ),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        print(e)
+
+
+@app.route("/questions", methods=["GET"])
+def get_questions():
+    try:
+        question_Data = list(db.questions.find())
+        for q in question_Data:
+            q["_id"] = str(q["_id"])
+        return Response(
+            response=json.dumps(question_Data),
+            status=200,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot read question"}),
             status=500,
             mimetype="application/json",
         )
