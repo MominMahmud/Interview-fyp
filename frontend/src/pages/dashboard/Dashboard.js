@@ -1,19 +1,18 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import axios from "axios"
+import axios from "axios";
 
 export default function Dashboard() {
-
+  const [jobss, setMyJobs] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:90/jobs").then((res)=>{
-      console.log(res)
-    })
-  
+    axios.get("http://localhost:90/jobs").then((res) => {
+      console.log(res);
+      setMyJobs(res.data);
+    });
+  }, []);
 
-  }, [])
-  
   const style = {
     position: "absolute",
     top: "50%",
@@ -125,6 +124,12 @@ export default function Dashboard() {
       </Modal>
       <div className="create-job btn btn-outline-success" onClick={handleOpen}>
         Create
+      </div>
+      <div className="grid">
+        {jobss.map((post) => {
+          const { name, desc, skills, edu, exp } = post
+          return <Card cardTitle={name} cardText={skills + '\n'+ edu}  />;
+        })}
       </div>
     </div>
   );
