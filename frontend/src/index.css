@@ -3,32 +3,34 @@
   font-family: "Poppins";
 }
 .profileBackground {
-  position: absolute;
-  width: 270px;
+  position: fixed;
+  width: 20%;
   height: 221px;
   left: 0px;
   top: 0px;
   background: #000c8e;
   box-shadow: 4px 7px 4px rgba(0, 0, 0, 0.12);
+  z-index: 2;
 }
 
 .profilePicture {
-  position: absolute;
+  position: fixed;
   width: 101px;
   height: 108px;
   left: 78px;
   top: 40px;
   border-radius: 50%;
+  z-index: 10;
 }
 
 .profileText {
-  position: absolute;
+  position: fixed;
   width: 116px;
   height: 25px;
   left: 74px;
   top: 150px;
+  z-index: 10;
 
-  
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -39,9 +41,9 @@
 }
 
 .sideNavBackground {
-  width: 270px;
+  width: 20%;
   height: 100vh;
-
+  position: fixed;
   background: #2a36b8;
   box-shadow: 14px -2px 18px rgba(0, 0, 0, 0.16);
 }
@@ -49,9 +51,9 @@
 .header {
   box-sizing: border-box;
   position: absolute;
-  width: 963px;
+  width: 82%;
   height: 60px;
-  left: 270px;
+  left: 244px;
   top: 0px;
   background: #f8f8f8;
   border: 1px solid rgba(0, 0, 0, 0.27);
@@ -83,9 +85,16 @@
   position: absolute;
   top:100px;
   left:320px;
+  
 
 }
+.create-job{
 
+  position: absolute;
+  left:90.5%;
+  bottom:97%;
+  
+}
 .progress{
 
   width:75%;
@@ -178,6 +187,10 @@ audio{
 .submit{
 
   margin-top: 20px;
+}
+.box{
+
+  z-index: 20;
 }
 
 
