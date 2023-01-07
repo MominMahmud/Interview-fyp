@@ -3,7 +3,7 @@ import pymongo
 from pymongo import MongoClient
 import json
 import dns
-from flask_cors import CORS,cross_origin
+from flask_cors import CORS, cross_origin
 
 
 from bson.objectid import ObjectId
@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-CORS(app)
+#CORS(app)
 
 
 try:
@@ -22,6 +22,7 @@ try:
     mongo.server_info()
 except:
     print("Couldn't connect to Db")
+
 
 @app.route("/createjobs", methods=["POST"])
 @cross_origin()
@@ -211,12 +212,6 @@ def get_questions():
             status=500,
             mimetype="application/json",
         )
-
-
-@app.route("/home")
-@app.route("/")
-def home():
-    return render_template("index.html")
 
 
 if __name__ == "__main__":
