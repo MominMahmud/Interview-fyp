@@ -54,6 +54,13 @@ export default function Dashboard() {
       id: new Date().getTime().toString(),
     };
     setJobs([...jobs, job]);
+    axios.post("http://localhost:90/createjobs",{
+      name:job.name,
+      desc:job.desc,
+      skills:job.skills,
+      edu:job.edu,
+      exp:job.exp
+    })
     console.log(jobs);
   };
 
@@ -118,7 +125,7 @@ export default function Dashboard() {
                 id="exp"
               />
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" onClose={handleClose}>Submit</button>
           </form>
         </Box>
       </Modal>
@@ -127,8 +134,23 @@ export default function Dashboard() {
       </div>
       <div className="grid">
         {jobss.map((post) => {
-          const { name, desc, skills, edu, exp } = post
-          return <Card cardTitle={name} cardText={skills + '\n'+ edu}  />;
+          const { name, desc, skills, edu, exp } = post;
+          return (
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">{name}</h5>
+                <p class="card-text">
+                  <b>Education</b>: {edu}
+                </p>
+                <p class="card-text">
+                  <b>Skills:</b> {skills}
+                </p>
+                <p className="card-text"><b>Experience:</b> {exp}</p>
+                <button className="btn btn-primary btn-sm">View Candidates</button>
+              </div>
+
+            </div>
+          );
         })}
       </div>
     </div>
