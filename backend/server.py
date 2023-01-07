@@ -128,7 +128,7 @@ def get_jobs():
             job["_id"] = str(job["_id"])
         return Response(
             response=json.dumps(job_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -176,7 +176,7 @@ def get_candidates():
             candidate["_id"] = str(candidate["_id"])
         return Response(
             response=json.dumps(candidate_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -228,7 +228,7 @@ def viewspecific_job(apliedfor):
             candidate["_id"] = str(candidate["_id"])
         return Response(
             response=json.dumps(candidate_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
@@ -268,7 +268,7 @@ def get_questions():
             q["_id"] = str(q["_id"])
         return Response(
             response=json.dumps(question_Data),
-            status=500,
+            status=200,
             mimetype="application/json",
         )
 
