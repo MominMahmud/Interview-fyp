@@ -214,5 +214,29 @@ def get_questions():
         )
 
 
+@app.route("/jobs/<id>", methods=["GET"])
+def getID_job(id):
+    try:
+        jobData = list(db.jobs.find({"_id": ObjectId(id)}))
+        for candidate in jobData:
+            candidate["_id"] = str(candidate["_id"])
+
+        # for attr in dir(dbResponse):
+        #     print(f"***********{attr}***********")
+        return Response(
+            response=json.dumps(jobData[0]["name"]),
+            status=200,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot update user"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
 if __name__ == "__main__":
     app.run(port=90, debug=True)
