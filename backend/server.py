@@ -3,11 +3,14 @@ import pymongo
 from pymongo import MongoClient
 import json
 import dns
+from flask_cors import CORS
 
 
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
+CORS(app)
+
 
 try:
     mongo = pymongo.MongoClient(
