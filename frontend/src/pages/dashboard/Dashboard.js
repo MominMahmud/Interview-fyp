@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import axios from "axios"
 
 export default function Dashboard() {
+
+  useEffect(() => {
+    axios.get("http://localhost:90/jobs").then((res)=>{
+      console.log(res)
+    })
+  
+
+  }, [])
+  
   const style = {
     position: "absolute",
     top: "50%",
