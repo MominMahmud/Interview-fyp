@@ -77,7 +77,9 @@
 
 from flask import Flask, Response, request
 import pymongo
+from pymongo import MongoClient
 import json
+import dns
 
 from bson.objectid import ObjectId
 
@@ -85,9 +87,9 @@ app = Flask(__name__)
 
 try:
     mongo = pymongo.MongoClient(
-        host="localhost", port=27017, serverSelectionTimeoutMS=1000
+        "mongodb+srv://admin:1234@fyp.dhi0fxe.mongodb.net/test?authMechanism=DEFAULT"
     )
-    db = mongo.fastHire
+    db = mongo["fastHire"]
     mongo.server_info()
 except:
     print("Couldn't connect to Db")
@@ -234,6 +236,46 @@ def viewspecific_job(apliedfor):
         print(e)
         return Response(
             response=json.dumps({"message": "Cannot find user appliedfor"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
+@app.route("/questions", methods=["POST"])
+def insert_questions():
+    try:
+        question = {
+            "text": request.form["text"],
+            "category": request.form["category"],
+        }
+        dbResponse = db.questions.insert_one(question)
+        return Response(
+            response=json.dumps(
+                {"message": "Question inserted", "id": f"{dbResponse.inserted_id}"}
+            ),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        print(e)
+
+
+@app.route("/questions", methods=["GET"])
+def get_questions():
+    try:
+        question_Data = list(db.questions.find())
+        for q in question_Data:
+            q["_id"] = str(q["_id"])
+        return Response(
+            response=json.dumps(question_Data),
+            status=500,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot read question"}),
             status=500,
             mimetype="application/json",
         )
