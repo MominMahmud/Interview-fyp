@@ -1,8 +1,9 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request, render_template
 import pymongo
 from pymongo import MongoClient
 import json
 import dns
+
 
 from bson.objectid import ObjectId
 
@@ -202,6 +203,12 @@ def get_questions():
             status=500,
             mimetype="application/json",
         )
+
+
+@app.route("/home")
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 
 if __name__ == "__main__":
