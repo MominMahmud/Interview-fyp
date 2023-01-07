@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+
 export default function Dashboard() {
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: "background.paper",
+    border: "2px solid #000",
     boxShadow: 24,
     p: 4,
-  }
+  };
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -21,6 +22,32 @@ export default function Dashboard() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [job, setJob] = useState({
+    name: "",
+    desc: "",
+    skills: "",
+    edu: "",
+    exp: "",
+  });
+  const [jobs, setJobs] = useState([]);
+  const handleInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    console.log(name, value);
+    setJob({ ...job, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newJob = {
+      ...job,
+      id: new Date().getTime().toString(),
+    };
+    setJobs([...jobs, job]);
+    console.log(jobs);
+  };
+
   return (
     <div className="dashboard">
       <Modal
@@ -31,155 +58,63 @@ export default function Dashboard() {
         aria-describedby="child-modal-description"
       >
         <Box className="box" sx={{ width: 200, ...style }}>
-          <form>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlform="name">Name</label>
               <input
-                type="email"
-                class="form-control"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
-                placeholder="Enter email"
-              />
-              <small id="emailHelp" class="form-text text-muted">
-                We'll never share your email with anyone else.
-              </small>
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
+                onChange={handleInput}
+                type="text"
+                value={job.name}
+                name="name"
+                id="name"
               />
             </div>
-            <div class="form-check">
+            <div>
+              <label htmlform="desc">Description</label>
               <input
-                type="checkbox"
-                class="form-check-input"
-                id="exampleCheck1"
+                onChange={handleInput}
+                type="text"
+                value={job.desc}
+                name="desc"
+                id="desc"
               />
-              <label class="form-check-label" for="exampleCheck1">
-                Check me out
-              </label>
             </div>
-            <button type="submit" class="btn btn-primary">
-              Submit
-            </button>
-            <button className='btn btn-primary'onClick={handleClose}>Close</button>
-
+            <div>
+              <label htmlform="skills">Skills</label>
+              <input
+                onChange={handleInput}
+                type="text"
+                value={job.skills}
+                name="skills"
+                id="skills"
+              />
+            </div>
+            <div>
+              <label htmlform="edu">Education</label>
+              <input
+                onChange={handleInput}
+                type="text"
+                value={job.edu}
+                name="edu"
+                id="edu"
+              />
+            </div>
+            <div>
+              <label htmlform="exp">Experience</label>
+              <input
+                onChange={handleInput}
+                type="text"
+                value={job.exp}
+                name="exp"
+                id="exp"
+              />
+            </div>
+            <button type="submit">Submit</button>
           </form>
         </Box>
       </Modal>
       <div className="create-job btn btn-outline-success" onClick={handleOpen}>
         Create
-      </div>
-      <div className="row">
-        <div className="col">
-          <Card
-            cardTitle="Software Engineer"
-            cardText="Bot interviewing for hiring Software Enginners"
-            value="75"
-          />
-        </div>
-        <div className="col">
-          <Card
-            cardTitle="Web Developer"
-            cardText="Bot interviewing for hiring Web Developers"
-            value="10"
-          />
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">ML Enginner</h5>
-              <p className="card-text">
-                Bot interviewing for hiring ML Enginners
-              </p>
-              <div class="progress">
-                <div
-                  class="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <a href="#" class="btn btn-primary">
-                View Candidates
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">Software Engineer</h5>
-              <p className="card-text">
-                Bot interviewing for hiring Software Enginners
-              </p>
-              <div class="progress">
-                <div
-                  class="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <a href="#" class="btn btn-primary">
-                View Candidates
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">Web Developer</h5>
-              <p className="card-text">
-                Bot interviewing for hiring Web Developerss
-              </p>
-              <div class="progress">
-                <div
-                  class="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <a href="#" class="btn btn-primary">
-                View Candidates
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="card">
-            <div className="card-body">
-              <h5 className="card-title">ML Enginner</h5>
-              <p className="card-text">
-                Bot interviewing for hiring ML Enginners
-              </p>
-              <div class="progress">
-                <div
-                  class="progress-bar progress-bar-striped progress-bar-animated"
-                  role="progressbar"
-                  aria-valuenow="75"
-                  aria-valuemin="0"
-                  aria-valuemax="100"
-                ></div>
-              </div>
-              <a href="#" class="btn btn-primary">
-                View Candidates
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
