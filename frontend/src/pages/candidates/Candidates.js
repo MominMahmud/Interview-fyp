@@ -28,6 +28,10 @@ export default function Candidates() {
     px: 4,
     pb: 3,
   };
+  const queryParameters = new URLSearchParams(window.location.search)
+  const type = queryParameters.get("id")
+  
+  console.log(type)
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);

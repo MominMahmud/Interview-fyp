@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-#CORS(app)
+CORS(app)
 
 
 try:
@@ -28,13 +28,13 @@ except:
 def create_job():
     try:
         print("22")
-        print(request.form)
+        print(request.json["name"])
         job = {
-            "name": request.form["name"],
-            "desc": request.form["desc"],
-            "skills": request.form["skills"],
-            "edu": request.form["edu"],
-            "exp": request.form["exp"],
+            "name": request.json["name"],
+            "desc": request.json["desc"],
+            "skills": request.json["skills"],
+            "edu": request.json["edu"],
+            "exp": request.json["exp"],
         }
         dbResponse = db.jobs.insert_one(job)
         # print(dbResponse.inserted_id)
@@ -52,10 +52,10 @@ def create_job():
 
 
 @app.route("/jobs", methods=["GET"])
-@cross_origin()
+
 def get_jobs():
     try:
-        job_Data = list(db.jobs.find({"exp": "5"}))
+        job_Data = list(db.jobs.find())
         for job in job_Data:
             job["_id"] = str(job["_id"])
         return Response(
