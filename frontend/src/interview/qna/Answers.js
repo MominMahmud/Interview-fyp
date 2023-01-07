@@ -75,7 +75,7 @@ export default function App() {
             <img src={logo} className="logo"></img>
           <Question index={nextQuestion}></Question>
           
-          <button className="btn btn-primary" onClick={start} disabled={isRecording}>
+          <button className="btn btn-danger" onClick={start} disabled={isRecording}>
             Record
           </button>
           <button className="btn btn-outline-primary" onClick={stop} disabled={!isRecording}>
@@ -99,7 +99,7 @@ export default function App() {
             ))}
           </div>
           <audio src={blobURL} controls="controls" />
-          <button className="btn btn-outline-success">Submit</button>
+          <button className="btn btn-outline-success submit">Submit</button>
         </div>
       </div>
     </>
