@@ -48,7 +48,7 @@ export default function Dashboard() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+   
     const newJob = {
       ...job,
       id: new Date().getTime().toString(),
@@ -67,7 +67,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard">
       <Modal
-        hideBackdrop
+        
         open={open}
         onClose={handleClose}
         aria-labelledby="child-modal-title"

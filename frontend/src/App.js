@@ -19,7 +19,7 @@ function App() {
             <Components header="Candidates"/>
             <Candidates/>
           </Route>
-          <Router path='/interview'>
+          <Router path='/interview/:id'>
             <Interview></Interview>
           </Router>
           <Router path='/application'>

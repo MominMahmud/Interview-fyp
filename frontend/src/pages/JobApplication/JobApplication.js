@@ -25,10 +25,9 @@ export default function JobApplication() {
     console.log(name, value);
     setCandidate({ ...candidate, [name]: value });
   };
-
   const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post("http://localhost:90/candidates", {
+
+    axios.post("http://localhost:90/candidates/", {
       name: candidate.name,
       email:candidate.email,
       age: candidate.age,
@@ -37,7 +36,12 @@ export default function JobApplication() {
       ranking: candidate.ranking,
       score: candidate.score,
       appliedfor: candidate.appliedfor,
-    });
+    }).then(axios.post("http://localhost:90/"+candidate.email).then((res)=>{
+
+      console.log(res)
+    })
+        
+    );
     console.log(candidate);
   };
   return (
@@ -107,6 +111,20 @@ export default function JobApplication() {
                 })}
               </select>
             </div>
+
+            <div>
+              <label htmlform="file">Experience</label>
+              <input
+                className="col-12"
+                onChange={handleInput}
+                type="file"
+                
+                name="file"
+                id="file"
+              />
+            </div>
+
+            
 
             <button type="submit" className="btn btn-primary w-25 mt-4">
               Apply
