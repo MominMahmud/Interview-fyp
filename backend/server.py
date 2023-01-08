@@ -13,7 +13,9 @@ app = Flask(__name__)
 
 # CORS(app)
 
-
+print(
+    "Hello ************************************************************* WORD************************888"
+)
 try:
     mongo = pymongo.MongoClient(
         "mongodb+srv://admin:1234@fyp.dhi0fxe.mongodb.net/test?authMechanism=DEFAULT"
@@ -73,12 +75,12 @@ def get_jobs():
         )
 
 
-@app.route("/candidates/", methods=["POST"])
+@app.route("/addcandidates", methods=["POST"])
 def insert_candidate():
     try:
         candidate = {
-            #  "id": request.form["id"],
             "name": request.form["name"],
+            "email": request.form["email"],
             "age": request.form["age"],
             "experience": request.form["experience"],
             "status": request.form["status"],
@@ -244,16 +246,16 @@ def get_specificjobs():
     try:
         jobArr = []
         job_Data = list(db.jobs.find())
-        print(job_Data)
+
         for job in job_Data:
-            print(job)
             jobArr.append(str(job["name"]))
+
             print(jobArr)
-            return Response(
-                response=json.dumps(jobArr),
-                status=200,
-                mimetype="application/json",
-            )
+        return Response(
+            response=json.dumps(jobArr),
+            status=200,
+            mimetype="application/json",
+        )
 
     except Exception as e:
         print(e)
