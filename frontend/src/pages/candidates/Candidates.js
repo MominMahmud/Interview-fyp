@@ -43,7 +43,8 @@ export default function Candidates() {
   //console.log(candidates[0].name)
   
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
+  const handleOpen = (params) => {
+    console.log(params)
     setOpen(true);
   };
   const handleClose = () => {
@@ -111,7 +112,10 @@ export default function Candidates() {
 
         return (
           <div>
-            <button className="btn btn-primary" onClick={handleOpen}>
+            <button className="btn btn-primary" onClick={()=>{
+              
+              handleOpen(thisRow._id)
+            }}>
               Responses
             </button>
             <Modal
@@ -121,7 +125,8 @@ export default function Candidates() {
               aria-describedby="child-modal-description"
             >
               <Box sx={{ width: 200, ...style }}>
-                <h2 id="child-modal-title">Text in a child modal</h2>
+                <h2 id="child-modal-title">Responses</h2>
+                
                 <p id="child-modal-description">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit.
                 </p>

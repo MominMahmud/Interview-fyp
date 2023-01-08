@@ -19,12 +19,12 @@ function App() {
             <Components header="Candidates"/>
             <Candidates/>
           </Route>
-          <Router path='/interview/:id'>
+          <Route path='/interview/:id'>
             <Interview></Interview>
-          </Router>
-          <Router path='/application'>
+          </Route>
+          <Route path='/application'>
             <JobApplication></JobApplication>
-          </Router>
+          </Route>
         </Switch>
       </Router>
     </>

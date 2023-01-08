@@ -139,8 +139,9 @@ def get_candidates():
 @app.route("/candidatesRes/<id>", methods=["PATCH"])
 def update_res(id):
     try:
+        print(request.json["res"])
         dbResponse = db.candidates.update_many(
-            {"_id": ObjectId(id)}, {"$push": {"res": request.form["res"]}}
+            {"_id": ObjectId(id)}, {"$push": {"res": request.json["res"]}}
         )
 
         if dbResponse.modified_count == 1:

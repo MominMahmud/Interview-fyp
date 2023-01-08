@@ -3,6 +3,9 @@ import MicRecorder from "mic-recorder-to-mp3";
 import Question from "./Question";
 import logo from '../../images/loggg.png'
 import axios from 'axios'
+import { useParams } from "react-router-dom";
+
+
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 const SpeechRecognition =
@@ -20,9 +23,9 @@ export default function App() {
   const [note, setNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
-  const queryParameters = new URLSearchParams(window.location.search)
-  const id = queryParameters.get("id")
 
+  const {id} = useParams();
+  console.log(id);
   function start() {
     mic.start();
     mic.onend = () => {
@@ -73,7 +76,7 @@ export default function App() {
 
   function onSubmit(){
 
-    axios.post("",{
+    axios.patch("http://localhost:90/candidatesRes/"+id,{
       res:savedNotes
     
     })
@@ -82,6 +85,7 @@ export default function App() {
 
   return (
     <>
+  
       <div id="background"></div>
       <div className="interview-section">
         <div className="section">
