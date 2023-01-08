@@ -78,5 +78,5 @@ def plot_graph():
     plt.show()
 
 
-l = input_main("12//test.wav")
+l = input_main("12//surprise.wav")
 plot_graph()

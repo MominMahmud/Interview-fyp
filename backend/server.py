@@ -215,7 +215,7 @@ def get_questions():
 
 
 @app.route("/jobs/<id>", methods=["GET"])
-#@cross_origin()
+# @cross_origin()
 def getID_job(id):
     try:
         jobData = list(db.jobs.find({"_id": ObjectId(id)}))
@@ -234,6 +234,31 @@ def getID_job(id):
         print(e)
         return Response(
             response=json.dumps({"message": "Cannot update user"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
+@app.route("/specificjobs", methods=["GET"])
+def get_specificjobs():
+    try:
+        jobArr = []
+        job_Data = list(db.jobs.find())
+        print(job_Data)
+        for job in job_Data:
+            print(job)
+            jobArr.append(str(job["name"]))
+            print(jobArr)
+            return Response(
+                response=json.dumps(jobArr),
+                status=200,
+                mimetype="application/json",
+            )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({job_Data}),
             status=500,
             mimetype="application/json",
         )
