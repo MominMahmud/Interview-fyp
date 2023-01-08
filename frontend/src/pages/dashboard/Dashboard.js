@@ -33,8 +33,6 @@ export default function Dashboard() {
   };
 
   const [job, setJob] = useState({
-
-    
     name: "",
     desc: "",
     skills: "",
@@ -56,13 +54,13 @@ export default function Dashboard() {
       id: new Date().getTime().toString(),
     };
     setJobs([...jobs, job]);
-    axios.post("http://localhost:90/createjobs",{
-      name:job.name,
-      desc:job.desc,
-      skills:job.skills,
-      edu:job.edu,
-      exp:job.exp
-    })
+    axios.post("http://localhost:90/createjobs", {
+      name: job.name,
+      desc: job.desc,
+      skills: job.skills,
+      edu: job.edu,
+      exp: job.exp,
+    });
     console.log(jobs);
   };
 
@@ -77,57 +75,71 @@ export default function Dashboard() {
       >
         <Box className="box" sx={{ width: 200, ...style }}>
           <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlform="name">Name</label>
-              <input
-                onChange={handleInput}
-                type="text"
-                value={job.name}
-                name="name"
-                id="name"
-              />
+            <h3>Create Job</h3>
+            <div className="row">
+              <div>
+                <label htmlform="name">Name</label>
+                <input
+                  className="col-12"
+                  onChange={handleInput}
+                  type="text"
+                  value={job.name}
+                  name="name"
+                  id="name"
+                />
+              </div>
+              <div>
+                <label htmlform="desc">Description</label>
+                <input
+                  className="col-12"
+                  onChange={handleInput}
+                  type="text"
+                  value={job.desc}
+                  name="desc"
+                  id="desc"
+                />
+              </div>
+              <div>
+                <label htmlform="skills">Skills</label>
+                <input
+                  className="col-12"
+                  onChange={handleInput}
+                  type="text"
+                  value={job.skills}
+                  name="skills"
+                  id="skills"
+                />
+              </div>
+              <div>
+                <label htmlform="edu">Education</label>
+                <input
+                  className="col-12"
+                  onChange={handleInput}
+                  type="text"
+                  value={job.edu}
+                  name="edu"
+                  id="edu"
+                />
+              </div>
+              <div>
+                <label htmlform="exp">Experience</label>
+                <input
+                  className="col-12"
+                  onChange={handleInput}
+                  type="text"
+                  value={job.exp}
+                  name="exp"
+                  id="exp"
+                />
+              </div>
             </div>
-            <div>
-              <label htmlform="desc">Description</label>
-              <input
-                onChange={handleInput}
-                type="text"
-                value={job.desc}
-                name="desc"
-                id="desc"
-              />
-            </div>
-            <div>
-              <label htmlform="skills">Skills</label>
-              <input
-                onChange={handleInput}
-                type="text"
-                value={job.skills}
-                name="skills"
-                id="skills"
-              />
-            </div>
-            <div>
-              <label htmlform="edu">Education</label>
-              <input
-                onChange={handleInput}
-                type="text"
-                value={job.edu}
-                name="edu"
-                id="edu"
-              />
-            </div>
-            <div>
-              <label htmlform="exp">Experience</label>
-              <input
-                onChange={handleInput}
-                type="text"
-                value={job.exp}
-                name="exp"
-                id="exp"
-              />
-            </div>
-            <button type="submit" onClose={handleClose}>Submit</button>
+            <button
+              type="submit"
+              onClose={handleClose}
+              className="btn btn-primary"
+            >
+              Submit
+            </button>
           </form>
         </Box>
       </Modal>
@@ -136,7 +148,7 @@ export default function Dashboard() {
       </div>
       <div className="grid">
         {jobss.map((post) => {
-          const { _id,name, desc, skills, edu, exp } = post;
+          const { _id, name, desc, skills, edu, exp } = post;
           return (
             <div class="card">
               <div class="card-body">
@@ -147,10 +159,16 @@ export default function Dashboard() {
                 <p class="card-text">
                   <b>Skills:</b> {skills}
                 </p>
-                <p className="card-text"><b>Experience:</b> {exp}</p>
-                <a className="btn btn-primary btn-sm" href={'/candidates/?id='+ _id}>View Candidates</a>
+                <p className="card-text">
+                  <b>Experience:</b> {exp}
+                </p>
+                <a
+                  className="btn btn-primary btn-sm"
+                  href={"/candidates/?id=" + _id}
+                >
+                  View Candidates
+                </a>
               </div>
-
             </div>
           );
         })}

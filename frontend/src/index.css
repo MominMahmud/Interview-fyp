@@ -92,7 +92,8 @@
 
   position: absolute;
   left:90.5%;
-  bottom:97%;
+  bottom:100%;
+  z-index: 20;
   
 }
 .progress{
@@ -160,7 +161,7 @@
 }
 
 #background {
-  position: fixed;
+  position: absolute;
   top: 0px;
   left: 0px;
   width: 50%;
@@ -205,4 +206,18 @@ audio{
 
   font-weight: bold;
   color:#2530a7
+}
+
+h3{
+
+  color:#000c8e;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.jobApplication{
+
+
+  z-index: 20;
 }
