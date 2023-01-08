@@ -126,7 +126,6 @@ export default function Candidates() {
               Responses
             </button>
             <Modal
-              hideBackdrop
               open={open}
               onClose={handleClose}
               aria-labelledby="child-modal-title"

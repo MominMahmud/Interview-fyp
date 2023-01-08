@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-# CORS(app)
+#CORS(app)
 
 print(
     "Hello ************************************************************* WORD************************888"
@@ -265,17 +265,19 @@ def get_specificjobs():
         )
 
 
-@app.route("/candidates/<id>", methods=["GET"])
+@app.route("/getcandidates/<email>", methods=["GET"])
 # @cross_origin()
-def getCandidateID_job(id):
+def getCandidateID_job(email):
     try:
-        print(id)
-        candData = list(db.candidates.find({"_id": ObjectId(id)}))
+        candData = list(db.candidates.find({"email": email}))
+        
         for candidate in candData:
-            candidate[id] = str(candidate[id])
+            candidate[email] = str(candidate[email])
+        print(candData[0][email],"hh")
 
         return Response(
-            response=json.dumps(candData[id]),
+            print(candData[0][email],"hh"),
+            response=json.dumps(candData[0]["email"]),
             status=200,
             mimetype="application/json",
         )
