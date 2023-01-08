@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
 import Question from "./Question";
 import logo from '../../images/loggg.png'
+import axios from 'axios'
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 const SpeechRecognition =
@@ -19,6 +20,8 @@ export default function App() {
   const [note, setNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
+  const queryParameters = new URLSearchParams(window.location.search)
+  const id = queryParameters.get("id")
 
   function start() {
     mic.start();
@@ -68,6 +71,15 @@ export default function App() {
     setNote("");
   };
 
+  function onSubmit(){
+
+    axios.post("",{
+      res:savedNotes
+    
+    })
+    
+  }
+
   return (
     <>
       <div id="background"></div>
@@ -100,7 +112,7 @@ export default function App() {
             ))}
           </div>
           <audio src={blobURL} controls="controls" title="1" download />
-          <button className="btn btn-outline-success submit">Submit</button>
+          <button className="btn btn-outline-success submit" onClick={onSubmit}>Submit</button>
         </div>
       </div>
     </>

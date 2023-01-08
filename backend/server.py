@@ -279,10 +279,9 @@ def get_specificjobs():
 # @cross_origin()
 def getID_cand(email):
     try:
-
         canData = list(db.candidates.find({"email": email}, {"_id": 1}))
         print(email)
-        str(canData)
+        #str(canData)
         #   print(str(canData))
 
         msg = Message(
