@@ -11,7 +11,7 @@ export default function JobApplication() {
   }, []);
   const [candidate, setCandidate] = useState({
     name: "",
-    email:"",
+    email: "",
     age: "",
     experience: "",
     status: "0",
@@ -26,23 +26,23 @@ export default function JobApplication() {
     setCandidate({ ...candidate, [name]: value });
   };
   const handleSubmit = (e) => {
-
-    e.preventDefault()
-    axios.post("http://localhost:90/candidates/", {
-      name: candidate.name,
-      email:candidate.email,
-      age: candidate.age,
-      experience: candidate.experience,
-      status: candidate.status,
-      ranking: candidate.ranking,
-      score: candidate.score,
-      appliedfor: candidate.appliedfor,
-    }).then(axios.get("http://localhost:90/getC/"+candidate.email).then((res)=>{
-
-      console.log(res)
-    })
-        
-    );
+    e.preventDefault();
+    axios
+      .post("http://localhost:90/candidates", {
+        name: candidate.name,
+        email: candidate.email,
+        age: candidate.age,
+        experience: candidate.experience,
+        status: candidate.status,
+        ranking: candidate.ranking,
+        score: candidate.score,
+        appliedfor: candidate.appliedfor,
+      })
+      .then(
+        axios.get("http://localhost:90/getC/" + candidate.email).then((res) => {
+          console.log(res);
+        })
+      );
     console.log(candidate);
   };
   return (
@@ -106,26 +106,12 @@ export default function JobApplication() {
                 id="appliedfor"
                 onChange={handleInput}
               >
-                {jobs.map((post)=>{
-                    const {_id,name,desc,skills,edu,exp } = post
-                    return <option className="drop-down">{name}</option>
+                {jobs.map((post) => {
+                  const { _id, name, desc, skills, edu, exp } = post;
+                  return <option className="drop-down">{name}</option>;
                 })}
               </select>
             </div>
-
-            <div>
-              <label htmlform="file">Experience</label>
-              <input
-                className="col-12"
-                onChange={handleInput}
-                type="file"
-                
-                name="file"
-                id="file"
-              />
-            </div>
-
-            
 
             <button type="submit" className="btn btn-primary w-25 mt-4">
               Apply
