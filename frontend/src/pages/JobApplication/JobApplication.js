@@ -11,6 +11,7 @@ export default function JobApplication() {
   }, []);
   const [candidate, setCandidate] = useState({
     name: "",
+    email:"",
     age: "",
     experience: "",
     status: "0",
@@ -27,8 +28,9 @@ export default function JobApplication() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:90/createjobs", {
+    axios.post("http://localhost:90/candidates", {
       name: candidate.name,
+      email:candidate.email,
       age: candidate.age,
       experience: candidate.experience,
       status: candidate.status,
@@ -55,6 +57,17 @@ export default function JobApplication() {
                 value={candidate.name}
                 name="name"
                 id="name"
+              />
+            </div>
+            <div>
+              <label htmlform="email">Email</label>
+              <input
+                className="col-12"
+                onChange={handleInput}
+                type="email"
+                value={candidate.email}
+                name="email"
+                id="email"
               />
             </div>
             <div>
@@ -94,17 +107,7 @@ export default function JobApplication() {
                 })}
               </select>
             </div>
-            <div>
-              <label htmlform="exp">Experience</label>
-              <input
-                className="col-12"
-                onChange={handleInput}
-                type="text"
-                value={candidate.experience}
-                name="exp"
-                id="exp"
-              />
-            </div>
+
             <button type="submit" className="btn btn-primary w-25 mt-4">
               Apply
             </button>

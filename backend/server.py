@@ -79,14 +79,14 @@ def get_jobs():
 def insert_candidate():
     try:
         candidate = {
-            "name": request.form["name"],
-            "email": request.form["email"],
-            "age": request.form["age"],
-            "experience": request.form["experience"],
-            "status": request.form["status"],
-            "ranking": request.form["ranking"],
-            "score": request.form["score"],
-            "appliedfor": request.form["appliedfor"],
+            "name": request.json["name"],
+            "email": request.json["email"],
+            "age": request.json["age"],
+            "experience": request.json["experience"],
+            "status": request.json["status"],
+            "ranking": request.json["ranking"],
+            "score": request.json["score"],
+            "appliedfor": request.json["appliedfor"],
         }
         dbResponse = db.candidates.insert_one(candidate)
         # print(dbResponse.inserted_id)
