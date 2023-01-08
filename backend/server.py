@@ -4,9 +4,6 @@ from pymongo import MongoClient
 import json
 import dns
 from flask_cors import CORS, cross_origin
-from flask import Flask, render_template, request
-from flask_mail import Mail, Message
-import os
 
 
 from bson.objectid import ObjectId
@@ -14,14 +11,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 465
-app.config["MAIL_USERNAME"] = "i190633@nu.edu.pk"
-app.config["MAIL_PASSWORD"] = "Metalmgsv@5"
-app.config["MAIL_USE_TLS"] = False
-app.config["MAIL_USE_SSL"] = True
-mail = Mail(app)
-# CORS(app)
+#CORS(app)
 
 print(
     "Hello ************************************************************* WORD************************888"
@@ -85,7 +75,7 @@ def get_jobs():
         )
 
 
-@app.route("/candidates", methods=["POST"])
+@app.route("/candidates/", methods=["POST"])
 def insert_candidate():
     try:
         candidate = {
@@ -275,30 +265,19 @@ def get_specificjobs():
         )
 
 
-@app.route("/getC/<email>", methods=["GET", "POST"])
+@app.route("/getcandidates/<email>", methods=["GET"])
 # @cross_origin()
-def getID_cand(email):
+def getCandidateID_job(email):
     try:
-
-        canData = list(db.candidates.find({"email": email}, {"_id": 1}))
-        print(email)
-        str(canData)
-        print(str(canData))
-
-        msg = Message(
-            "FastHire",
-            sender="noreply@demo.com",
-            recipients=[email],
-        )
-        msg.body = (
-            "Dear Candidate,\n\n\nYour details have been received by us successfuly. Your information is confidential and will not be shared to anyone.\nYour interview will be conducted by using your camera and microphone. When prompted to allow camera or video click Allow. Whenever you are ready to give the interview,\nClick on this link below: \n\nhttp://localhost:3000/interview/"
-            + str(canData[0]["_id"])
-            + "\n\n\n\nInstructions:\n1- Click on Listen button to hear the question.\n2- Click on Record to record your response.\n3- Click on Save Answer to save your answer and see the text deteced by us.\n4-Click on Next Question to switch to the next question. Click listen button again to listen to the new question.\n5-Click on Submit to submit your answer."
-        )
-        mail.send(msg)
+        candData = list(db.candidates.find({"email": email}))
+        
+        for candidate in candData:
+            candidate[email] = str(candidate[email])
+        print(candData[0][email],"hh")
 
         return Response(
-            response=json.dumps(str(canData[0]["_id"])),
+            print(candData[0][email],"hh"),
+            response=json.dumps(candData[0]["email"]),
             status=200,
             mimetype="application/json",
         )

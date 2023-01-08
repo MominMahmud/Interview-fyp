@@ -27,6 +27,7 @@ export default function JobApplication() {
   };
   const handleSubmit = (e) => {
 
+    e.preventDefault()
     axios.post("http://localhost:90/candidates/", {
       name: candidate.name,
       email:candidate.email,
@@ -36,7 +37,7 @@ export default function JobApplication() {
       ranking: candidate.ranking,
       score: candidate.score,
       appliedfor: candidate.appliedfor,
-    }).then(axios.post("http://localhost:90/"+candidate.email).then((res)=>{
+    }).then(axios.get("http://localhost:90/getC/"+candidate.email).then((res)=>{
 
       console.log(res)
     })
