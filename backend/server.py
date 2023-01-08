@@ -249,7 +249,7 @@ def get_specificjobs():
             print(job)
             jobArr.append(str(job["name"]))
             print(jobArr)
-            return Response(
+        return Response(
                 response=json.dumps(jobArr),
                 status=200,
                 mimetype="application/json",
