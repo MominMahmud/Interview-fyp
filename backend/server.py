@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-#CORS(app)
+# CORS(app)
 
 
 try:
@@ -53,7 +53,6 @@ def create_job():
 
 
 @app.route("/jobs", methods=["GET"])
-
 def get_jobs():
     try:
         job_Data = list(db.jobs.find())
@@ -78,6 +77,7 @@ def get_jobs():
 def insert_candidate():
     try:
         candidate = {
+            #  "id": request.form["id"],
             "name": request.form["name"],
             "age": request.form["age"],
             "experience": request.form["experience"],
