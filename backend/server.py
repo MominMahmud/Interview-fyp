@@ -246,9 +246,7 @@ def get_specificjobs():
         job_Data = list(db.jobs.find())
         print(job_Data)
         for job in job_Data:
-            print(job)
             jobArr.append(str(job["name"]))
-            print(jobArr)
         return Response(
                 response=json.dumps(jobArr),
                 status=200,
