@@ -58,6 +58,7 @@ export default function App() {
       .then(([buffer, blob]) => {
         const blobURL = URL.createObjectURL(blob);
         setBlob(blobURL);
+        console.log(blobURL)
         setRecording(false);
       })
       .catch((e) => console.log(e));
@@ -98,7 +99,7 @@ export default function App() {
               <p key={n}>{n}</p>
             ))}
           </div>
-          <audio src={blobURL} controls="controls" />
+          <audio src={blobURL} controls="controls" title="1" download />
           <button className="btn btn-outline-success submit">Submit</button>
         </div>
       </div>
