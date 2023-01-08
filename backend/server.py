@@ -4,6 +4,9 @@ from pymongo import MongoClient
 import json
 import dns
 from flask_cors import CORS, cross_origin
+from flask import Flask, render_template, request
+from flask_mail import Mail, Message
+import os
 
 
 from bson.objectid import ObjectId
@@ -11,7 +14,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-#CORS(app)
+# CORS(app)
 
 print(
     "Hello ************************************************************* WORD************************888"
@@ -75,7 +78,7 @@ def get_jobs():
         )
 
 
-@app.route("/candidates/", methods=["POST"])
+@app.route("/candidates", methods=["POST"])
 def insert_candidate():
     try:
         candidate = {
@@ -265,19 +268,17 @@ def get_specificjobs():
         )
 
 
-@app.route("/getcandidates/<email>", methods=["GET"])
+@app.route("/candidates/<id>", methods=["GET"])
 # @cross_origin()
-def getCandidateID_job(email):
+def getCandidateID_job(id):
     try:
-        candData = list(db.candidates.find({"email": email}))
-        
+        print(id)
+        candData = list(db.candidates.find({"_id": ObjectId(id)}))
         for candidate in candData:
-            candidate[email] = str(candidate[email])
-        print(candData[0][email],"hh")
+            candidate[id] = str(candidate[id])
 
         return Response(
-            print(candData[0][email],"hh"),
-            response=json.dumps(candData[0]["email"]),
+            response=json.dumps(candData[id]),
             status=200,
             mimetype="application/json",
         )
