@@ -1,4 +1,5 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -29,9 +30,29 @@ export default function Candidates() {
     pb: 3,
   };
   const queryParameters = new URLSearchParams(window.location.search)
-  const type = queryParameters.get("id")
+  const id = queryParameters.get("id")
+  const [job,setJob]=useState("")
+  var [candidates,setCandidates]=useState([])
+  var url="http://localhost:90/jobs"
+  var url2="http://localhost:90/candidates"
+  url=url+'/'+id;
+  console.log(url)
+  useEffect(() => {
+    axios.get(url).then((res) => {
+      console.log(res.data);
+      setJob(res.data);
+      url2=url2+'/'+res.data;
+    }).then(()=>{
+      axios.get(url2).then(async cand=>{
+
+        
+        await setCandidates(cand.data)
+      })
+    });
+  }, []);
+
+  //console.log(candidates[0].name)
   
-  console.log(type)
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -40,37 +61,43 @@ export default function Candidates() {
     setOpen(false);
   };
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
+    
     {
-      field: "firstName",
-      headerName: "First name",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "lastName",
-      headerName: "Last name",
+      field: "name",
+      headerName: "Name",
       width: 150,
       editable: true,
     },
     {
       field: "age",
       headerName: "Age",
-      type: "number",
+      type:"string",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "experience",
+      headerName: "Experience",
+      type:"string",
       width: 110,
       editable: true,
     },
     {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
+      field: "status",
+      headerName: "Status",
+      type:"string",
+      sortable: true,
       width: 160,
-      valueGetter: (params) =>
-        `${params.getValue(params.id, "firstName") || ""} ${
-          params.getValue(params.id, "lastName") || ""
-        }`,
     },
+
+    {
+      field:"ranking",
+      headerName:"Rank",
+      type:"string",
+      sortable:true,
+      width:150
+    },
+
     {
       field: "action",
       headerName: "Action",
@@ -121,11 +148,12 @@ export default function Candidates() {
   return (
     <div style={{ height: 500 }} className="table">
       <DataGrid
-        rows={rows}
+        rows={candidates}
         columns={columns}
-        pageSize={5}
+        pageSize={30}
         checkboxSelection
         disableSelectionOnClick
+        getRowId={(row) => row._id}
       />
     </div>
   );

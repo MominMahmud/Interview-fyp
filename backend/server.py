@@ -215,6 +215,7 @@ def get_questions():
 
 
 @app.route("/jobs/<id>", methods=["GET"])
+#@cross_origin()
 def getID_job(id):
     try:
         jobData = list(db.jobs.find({"_id": ObjectId(id)}))
