@@ -73,7 +73,7 @@ def get_jobs():
         )
 
 
-@app.route("/candidates/", methods=["POST"])
+@app.route("/candidate/", methods=["POST"])
 def insert_candidate():
     try:
         candidate = {
