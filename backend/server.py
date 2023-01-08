@@ -89,6 +89,7 @@ def get_jobs():
 def insert_candidate():
     try:
         candidate = {
+            # "res": request.json["res"].toArray(),
             "name": request.json["name"],
             "email": request.json["email"],
             "age": request.json["age"],
@@ -98,6 +99,7 @@ def insert_candidate():
             "score": request.json["score"],
             "appliedfor": request.json["appliedfor"],
         }
+        candidate["res"].append(request.json["res"])
         dbResponse = db.candidates.insert_one(candidate)
         # print(dbResponse.inserted_id)
         for attr in dir(dbResponse):
