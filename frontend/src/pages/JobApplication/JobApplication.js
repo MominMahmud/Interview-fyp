@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function JobApplication() {
+  const [jobs, setMyJobs] = useState([]);
+  useEffect(() => {
+    axios.get("http://localhost:90/jobs").then((res) => {
+      console.log(res);
+      setMyJobs(res.data);
+    });
+  }, []);
   const [candidate, setCandidate] = useState({
     name: "",
     age: "",
@@ -75,18 +82,17 @@ export default function JobApplication() {
             <div>
               <label htmlform="appliedfor">Select a Job</label>
               <select
-                class="form-select form-select-lg mb-3 col-12"
+                class="form-select col-12"
                 aria-label=".form-select-lg example"
                 name="appliedfor"
                 id="appliedfor"
                 onChange={handleInput}
               >
-                <option selected>1</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {jobs.map((post)=>{
+                    const {_id,name,desc,skills,edu,exp } = post
+                    return <option className="drop-down">{name}</option>
+                })}
               </select>
-
             </div>
             <div>
               <label htmlform="exp">Experience</label>
