@@ -89,7 +89,6 @@ def get_jobs():
 def insert_candidate():
     try:
         candidate = {
-            # "res": request.json["res"].toArray(),
             "name": request.json["name"],
             "email": request.json["email"],
             "age": request.json["age"],
@@ -98,6 +97,7 @@ def insert_candidate():
             "ranking": request.json["ranking"],
             "score": request.json["score"],
             "appliedfor": request.json["appliedfor"],
+            "res": [],
         }
         candidate["res"].append(request.json["res"])
         dbResponse = db.candidates.insert_one(candidate)
@@ -136,15 +136,13 @@ def get_candidates():
         )
 
 
-@app.route("/jobs/<id>", methods=["PATCH"])
-def update_job(id):
+@app.route("/candidatesRes/<id>", methods=["PATCH"])
+def update_res(id):
     try:
-        dbResponse = db.jobs.update_one(
-            {"_id": ObjectId(id)}, {"$set": {"name": request.form["name"]}}
+        dbResponse = db.candidates.update_many(
+            {"_id": ObjectId(id)}, {"$push": {"res": request.form["res"]}}
         )
 
-        # for attr in dir(dbResponse):
-        #     print(f"***********{attr}***********")
         if dbResponse.modified_count == 1:
             return Response(
                 response=json.dumps({"message": "Updated user"}),
@@ -281,9 +279,10 @@ def get_specificjobs():
 # @cross_origin()
 def getID_cand(email):
     try:
+
         canData = list(db.candidates.find({"email": email}, {"_id": 1}))
         print(email)
-        #str(canData)
+        str(canData)
         #   print(str(canData))
 
         msg = Message(
