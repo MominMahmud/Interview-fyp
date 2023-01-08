@@ -265,5 +265,29 @@ def get_specificjobs():
         )
 
 
+@app.route("/candidates/<id>", methods=["GET"])
+# @cross_origin()
+def getCandidateID_job(id):
+    try:
+        print(id)
+        candData = list(db.candidates.find({"_id": ObjectId(id)}))
+        for candidate in candData:
+            candidate[id] = str(candidate[id])
+
+        return Response(
+            response=json.dumps(candData[id]),
+            status=200,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot update user"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
 if __name__ == "__main__":
     app.run(port=90, debug=True)
