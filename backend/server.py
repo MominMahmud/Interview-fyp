@@ -140,7 +140,7 @@ def get_candidates():
 def update_res(id):
     try:
         print(request.json["res"])
-        dbResponse = db.candidates.update_many(
+        dbResponse = db.candidates.update_one(
             {"_id": ObjectId(id)}, {"$push": {"res": request.json["res"]}}
         )
 

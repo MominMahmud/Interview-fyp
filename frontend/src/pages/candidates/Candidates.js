@@ -18,40 +18,60 @@ export default function Candidates() {
     px: 4,
     pb: 3,
   };
-  const queryParameters = new URLSearchParams(window.location.search)
-  const id = queryParameters.get("id")
-  const [job,setJob]=useState("")
-  var [candidates,setCandidates]=useState([])
-  var url="http://localhost:90/jobs"
-  var url2="http://localhost:90/candidates"
-  url=url+'/'+id;
-  console.log(url)
+  const queryParameters = new URLSearchParams(window.location.search);
+  const id = queryParameters.get("id");
+  const [job, setJob] = useState("");
+  var [candidates, setCandidates] = useState([]);
+  var url = "http://localhost:90/jobs";
+  var url2 = "http://localhost:90/candidates";
+  url = url + "/" + id;
+  console.log(url);
   useEffect(() => {
-    axios.get(url).then((res) => {
-      console.log(res.data);
-      setJob(res.data);
-      url2=url2+'/'+res.data;
-    }).then(()=>{
-      axios.get(url2).then(async cand=>{
-
-        
-        await setCandidates(cand.data)
+    axios
+      .get(url)
+      .then((res) => {
+        console.log(res.data);
+        setJob(res.data);
+        url2 = url2 + "/" + res.data;
       })
-    });
+      .then(() => {
+        axios.get(url2).then(async (cand) => {
+          await setCandidates(cand.data);
+        });
+      });
   }, []);
 
+  console.log(candidates);
+
   //console.log(candidates[0].name)
-  
+  const [candidateID,setID]=useState({});
+  const [candidateResp,setCandidateResp] = useState({
+    name: "",
+    email: "",
+    age: "",
+    experience: "",
+    status: "0",
+    ranking: "0",
+    score: "0",
+    appliedfor: "",
+    res:[]
+  });
   const [open, setOpen] = React.useState(false);
-  const handleOpen = (params) => {
-    console.log(params)
-    setOpen(true);
-  };
-  const handleClose = () => {
+  
+
+
+  const handleClose = (params) => {
+    console.log(params);
     setOpen(false);
   };
   const columns = [
-    
+    {
+      field: "_id",
+      headerName: "id",
+      width: 50,
+      editable: true,
+    },
+
     {
       field: "name",
       headerName: "Name",
@@ -61,44 +81,57 @@ export default function Candidates() {
     {
       field: "age",
       headerName: "Age",
-      type:"string",
+      type: "string",
       width: 150,
       editable: true,
     },
     {
       field: "experience",
       headerName: "Experience",
-      type:"string",
+      type: "string",
       width: 110,
       editable: true,
     },
     {
       field: "status",
       headerName: "Status",
-      type:"string",
+      type: "string",
       sortable: true,
-      width: 160,
+      width: 100,
     },
 
     {
-      field:"ranking",
-      headerName:"Rank",
-      type:"string",
-      sortable:true,
-      width:150
+      field: "ranking",
+      headerName: "Rank",
+      type: "string",
+      sortable: true,
+      width: 100,
     },
 
     {
       field: "action",
       headerName: "Action",
-      width: 120,
+      width: 150,
       sortable: false,
       renderCell: (params) => {
         const onClick = (e) => {
+          setOpen(true);
+
           e.stopPropagation(); // don't select this row after clicking
 
           const api = params.api;
-          const thisRow = {};
+          const thisRow = {
+            name: "",
+            email: "",
+            age: "",
+            experience: "",
+            status: "0",
+            ranking: "0",
+            score: "0",
+            appliedfor: "",
+            res:[]
+
+          };
 
           api
             .getAllColumns()
@@ -106,16 +139,18 @@ export default function Candidates() {
             .forEach(
               (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             );
+            setID(thisRow)
+            setCandidateResp(candidates.filter(async (data)=>{
+              return await data._id==thisRow._id;
+            }))
+            
 
           return alert(JSON.stringify(thisRow, null, 4));
         };
 
         return (
           <div>
-            <button className="btn btn-primary" onClick={()=>{
-              
-              handleOpen(thisRow._id)
-            }}>
+            <button className="btn btn-primary" onClick={onClick}>
               Responses
             </button>
             <Modal
@@ -126,11 +161,13 @@ export default function Candidates() {
             >
               <Box sx={{ width: 200, ...style }}>
                 <h2 id="child-modal-title">Responses</h2>
-                
-                <p id="child-modal-description">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                </p>
-                <button className='btn btn-primary'onClick={handleClose}>Close</button>
+                 {console.log(candidateResp[0])}
+               {candidateResp[0]["res"].map((n) => 
+               <p key={n}>{n}</p>  )} 
+                <p id="child-modal-description">{candidateID["res"]}</p>
+                <button className="btn btn-primary" onClick={handleClose}>
+                  Close
+                </button>
               </Box>
             </Modal>
           </div>

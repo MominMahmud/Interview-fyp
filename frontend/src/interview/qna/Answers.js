@@ -20,7 +20,7 @@ export default function App() {
   const [isRecording, setRecording] = useState(false);
   const [blobURL, setBlob] = useState("");
   const [isBlocked, setBlocked] = useState(false);
-  const [note, setNote] = useState(null);
+  const [note, setNote] = useState("");
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
 
@@ -71,15 +71,16 @@ export default function App() {
   }
   const handleSaveNote = () => {
     setSavedNotes([...savedNotes, note]);
-    setNote("");
+    ;
   };
 
   function onSubmit(){
 
     axios.patch("http://localhost:90/candidatesRes/"+id,{
-      res:savedNotes
+      res:note
     
     })
+    setNote("")
     
   }
 

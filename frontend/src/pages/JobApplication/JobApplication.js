@@ -19,7 +19,7 @@ export default function JobApplication() {
     ranking: "0",
     score: "0",
     appliedfor: "",
-    res:[]
+    res:"-----------------"
   });
   const handleInput = (e) => {
     const name = e.target.name;
@@ -28,7 +28,7 @@ export default function JobApplication() {
     setCandidate({ ...candidate, [name]: value });
   };
   const handleSubmit = (e) => {
-    e.preventDefault();
+    
     axios
       .post("http://localhost:90/candidates", {
         
