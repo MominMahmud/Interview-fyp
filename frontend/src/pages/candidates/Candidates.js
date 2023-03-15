@@ -45,17 +45,9 @@ export default function Candidates() {
 
   //console.log(candidates[0].name)
   const [candidateID,setID]=useState({});
-  const [candidateResp,setCandidateResp] = useState({
-    name: "",
-    email: "",
-    age: "",
-    experience: "",
-    status: "0",
-    ranking: "0",
-    score: "0",
-    appliedfor: "",
-    res:[]
-  });
+  const [candidateResp,setCandidateResp] = useState([{
+
+  }]);
   const [open, setOpen] = React.useState(false);
   
 
@@ -63,6 +55,17 @@ export default function Candidates() {
   const handleClose = (params) => {
     console.log(params);
     setOpen(false);
+    setCandidateResp([{
+      name: "",
+      email: "",
+      age: "",
+      experience: "",
+      status: "0",
+      ranking: "0",
+      score: "0",
+      appliedfor: "",
+      res:[]
+    }])
   };
   const columns = [
     {
@@ -115,21 +118,13 @@ export default function Candidates() {
       sortable: false,
       renderCell: (params) => {
         const onClick = (e) => {
-          setOpen(true);
+          
 
           e.stopPropagation(); // don't select this row after clicking
 
           const api = params.api;
           const thisRow = {
-            name: "",
-            email: "",
-            age: "",
-            experience: "",
-            status: "0",
-            ranking: "0",
-            score: "0",
-            appliedfor: "",
-            res:[]
+ 
 
           };
 
@@ -141,11 +136,12 @@ export default function Candidates() {
             );
             setID(thisRow)
             setCandidateResp(candidates.filter(async (data)=>{
-              return await data._id==thisRow._id;
+              
+              return await data._id===candidateID._id;
             }))
             
-
-          return alert(JSON.stringify(thisRow, null, 4));
+            setOpen(true)
+          return alert(JSON.stringify(thisRow._id, null, 4));
         };
 
         return (
@@ -162,8 +158,8 @@ export default function Candidates() {
               <Box sx={{ width: 200, ...style }}>
                 <h2 id="child-modal-title">Responses</h2>
                  {console.log(candidateResp[0])}
-               {candidateResp[0]["res"].map((n) => 
-               <p key={n}>{n}</p>  )} 
+                {candidateResp[0]["res"]?.map((n) => 
+               <p key={n}>{n}</p>  )}  
                 <p id="child-modal-description">{candidateID["res"]}</p>
                 <button className="btn btn-primary" onClick={handleClose}>
                   Close

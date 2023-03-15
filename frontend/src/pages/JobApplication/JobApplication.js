@@ -19,7 +19,7 @@ export default function JobApplication() {
     ranking: "0",
     score: "0",
     appliedfor: "",
-    res:"-----------------"
+    res:[""]
   });
   const handleInput = (e) => {
     const name = e.target.name;

@@ -15,9 +15,10 @@
 
 .profilePicture {
   position: fixed;
-  width: 101px;
-  height: 108px;
-  left: 78px;
+  width: 10%;
+  height: 20%;
+  left: 5%;
+
   top: 40px;
   border-radius: 50%;
   z-index: 10;
@@ -25,9 +26,9 @@
 
 .profileText {
   position: fixed;
-  width: 116px;
-  height: 25px;
-  left: 74px;
+  width: 10%;
+  height: 10%;
+  left: 5%;
   top: 150px;
   z-index: 10;
 
@@ -53,7 +54,7 @@
   position: absolute;
   width: 82%;
   height: 60px;
-  left: 244px;
+  margin-left: 20%;
   top: 0px;
   background: #f8f8f8;
   border: 1px solid rgba(0, 0, 0, 0.27);
@@ -66,7 +67,7 @@
 }
 .headerText {
   position: relative;
-  width: 149px;
+  width: 250px;
   height: 21px;
   left: 50px;
   top: 20px;
@@ -90,11 +91,29 @@
 }
 .create-job{
 
-  position: absolute;
-  left:90.5%;
-  bottom:100%;
+  
+  width:50%;
+  margin-left:auto;
+  margin-right: auto;
+  margin-top: 130px;
   z-index: 20;
   
+
+}
+
+.hideJobForm{
+
+  display:none
+}
+
+
+input[type=checkbox]{
+
+  display: inline;
+}
+button{
+
+  margin:0
 }
 .progress{
 
@@ -176,10 +195,7 @@
   margin-bottom: 20px;
 }
 
-button{
 
-  margin:5px
-}
 audio{
   display: block;
   width:50%;
@@ -191,7 +207,10 @@ audio{
 }
 .box{
 
+  
   z-index: 20;
+  margin-left: 20%;
+  
 }
 
 
@@ -225,4 +244,8 @@ h3{
 .drop-down{
 
   font-size: 20px;
+}
+.create-job{
+
+
 }
