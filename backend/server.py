@@ -65,7 +65,7 @@ emotion_dict1 = {
     "surprise": 0,
 }
 # emotion_dict1 = { "angry":0, "disgust":0, "fear":0, "happy":0, "sad":0,  "surprise":0,"neutral":0}
-cap = cv2.VideoCapture("12.mp4")
+
 lastemotions = list()
 # current_emotion_count=3
 emotions = [0, 0, 0, 0, 0, 0, 0]
@@ -130,6 +130,7 @@ def return_percentage_listv(li):
 
 
 def audioVideoEmotion(address):
+    cap = cv2.VideoCapture(address)
     clip1 = VideoFileClip(address)
     clip1.audio.write_audiofile("Audios//test1.wav")
     while True:
@@ -180,14 +181,6 @@ def audioVideoEmotion(address):
         input_main("Audios//test1.wav"),
         return_emoion_list(),
     )
-
-
-(
-    videoemotionlabels,
-    videoemotionpercentages,
-    audioemotiopercentages,
-    audioemotionlabels,
-) = audioVideoEmotion("12.mp4")
 
 
 app = Flask(__name__)
@@ -490,14 +483,21 @@ def getID_cand(email):
         )
 
 
-print(videoemotionlabels)
-
-
 @app.route("/av", methods=["POST"])
 def insert_labels():
-    print(videoemotionlabels[0])
+    v_id = request.json["id"]
+    fpath = "./public/" + v_id + ".mp4"
+    print(v_id)
+    (
+        videoemotionlabels,
+        videoemotionpercentages,
+        audioemotiopercentages,
+        audioemotionlabels,
+    ) = audioVideoEmotion(fpath)
+
     try:
         labels = {
+            "_id": v_id,
             "labelsV": videoemotionlabels,
             "valueV": videoemotionpercentages,
             "labelsA": audioemotionlabels,
