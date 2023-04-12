@@ -3,7 +3,40 @@ import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import Chart from "chart.js/auto";
+import { BarChart } from "../../components/charts/BarChart";
+const Data = [
+  {
+    id: 1,
+    year: 2016,
+    userGain: 80000,
+    userLost: 823
+  },
+  {
+    id: 2,
+    year: 2017,
+    userGain: 45677,
+    userLost: 345
+  },
+  {
+    id: 3,
+    year: 2018,
+    userGain: 78888,
+    userLost: 555
+  },
+  {
+    id: 4,
+    year: 2019,
+    userGain: 90000,
+    userLost: 4555
+  },
+  {
+    id: 5,
+    year: 2020,
+    userGain: 4300,
+    userLost: 234
+  }
+]
 export default function Candidates() {
   const style = {
     position: "absolute",
@@ -18,6 +51,24 @@ export default function Candidates() {
     px: 4,
     pb: 3,
   };
+  const [chartData, setChartData] = useState({
+    labels: Data.map((data) => data.year), 
+    datasets: [
+      {
+        label: "Users Gained ",
+        data: Data.map((data) => data.userGain),
+        backgroundColor: [
+          "rgba(75,192,192,1)",
+          "&quot;#ecf0f1",
+          "#50AF95",
+          "#f3ba2f",
+          "#2a71d0"
+        ],
+        borderColor: "black",
+        borderWidth: 2
+      }
+    ]
+  });
   const queryParameters = new URLSearchParams(window.location.search);
   const id = queryParameters.get("id");
   const [job, setJob] = useState("");
@@ -35,8 +86,8 @@ export default function Candidates() {
         url2 = url2 + "/" + res.data;
       })
       .then(() => {
-        axios.get(url2).then(async (cand) => {
-          await setCandidates(cand.data);
+        axios.get(url2).then((cand) => {
+          setCandidates(cand.data);
         });
       });
   }, []);
@@ -156,10 +207,8 @@ export default function Candidates() {
               aria-describedby="child-modal-description"
             >
               <Box sx={{ width: 200, ...style }}>
-                <h2 id="child-modal-title">Responses</h2>
-                 {console.log(candidateResp[0])}
-                {candidateResp[0]["res"]?.map((n) => 
-               <p key={n}>{n}</p>  )}  
+                
+                 <BarChart chartData={chartData}></BarChart>
                 <p id="child-modal-description">{candidateID["res"]}</p>
                 <button className="btn btn-primary" onClick={handleClose}>
                   Close
