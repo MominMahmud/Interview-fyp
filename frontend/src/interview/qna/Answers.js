@@ -29,26 +29,26 @@ export default function App() {
   const { id } = useParams();
   console.log(id);
   // function start() {
-    // mic.start();
-    // mic.onend = () => {
-    //   console.log("continue..");
-    //   mic.start();
-    // };
-    // mic.onstart = () => {
-    //   console.log("Mics on");
-    // };
+  // mic.start();
+  // mic.onend = () => {
+  //   console.log("continue..");
+  //   mic.start();
+  // };
+  // mic.onstart = () => {
+  //   console.log("Mics on");
+  // };
 
-    // mic.onresult = (event) => {
-    //   const transcript = Array.from(event.results)
-    //     .map((result) => result[0])
-    //     .map((result) => result.transcript)
-    //     .join("");
-    //   console.log(transcript);
-    //   setNote(transcript);
-    //   mic.onerror = (event) => {
-    //     console.log(event.error);
-    //   };
-    // };
+  // mic.onresult = (event) => {
+  //   const transcript = Array.from(event.results)
+  //     .map((result) => result[0])
+  //     .map((result) => result.transcript)
+  //     .join("");
+  //   console.log(transcript);
+  //   setNote(transcript);
+  //   mic.onerror = (event) => {
+  //     console.log(event.error);
+  //   };
+  // };
   //}
 
   function stop() {
@@ -89,7 +89,7 @@ export default function App() {
 
   async function start() {
 
-    
+
 
 
     const constaints = {
@@ -213,7 +213,7 @@ export default function App() {
 
   function stop() {
 
-    
+
     mediaRecorder.stop()
 
   }
@@ -259,9 +259,10 @@ export default function App() {
               <p key={n}>{n}</p>
             ))}
           </div>
-          <audio src={blobURL} controls="controls" title="1" download />
-          <button className="btn btn-outline-success submit" onClick={onSubmit}>Submit</button>
-        </div> */}
+            <audio src={blobURL} controls="controls" title="1" download />*/}
+      <div>
+        <button className="btn btn-outline-success submit" onClick={onSubmit}>Submit</button></div>
+      {/*</div> */}
 
     </>
   );

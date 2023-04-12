@@ -184,6 +184,7 @@ def audioVideoEmotion(address):
 
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
