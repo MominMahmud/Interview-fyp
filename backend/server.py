@@ -311,7 +311,11 @@ def getID_cand(email):
             status=500,
             mimetype="application/json",
         )
+@app.route("/user/id", methods=["POST"])
+def emotionsWithId:
+    id = request.form["id"]
 
+    
 
 if __name__ == "__main__":
     app.run(port=90, debug=True)
