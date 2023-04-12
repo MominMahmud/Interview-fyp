@@ -3,6 +3,6 @@ import Answers from './qna/Answers'
 
 export default function Interview() {
   return (
-    <div ><Answers/></div>
+    <div className='answer'><Answers/></div>
   )
 }
