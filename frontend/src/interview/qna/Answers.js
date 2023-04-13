@@ -62,11 +62,10 @@ export default function App() {
 
   function onSubmit() {
 
-    axios.patch("http://localhost:90/av/", {
-      id: id
+    axios.patch("http://localhost:90/candidatesRes/" + id, {
+      res: note
 
     })
-    console.log(id)
     setNote("")
 
   }
