@@ -1,5 +1,7 @@
 import React from "react";
 import Card from "../../components/card/Card";
+import { useState, useEffect } from "react";
+import axios from 'axios'
 export default function Dashboard() {
   const [jobss, setMyJobs] = useState([]);
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  const handleClick = ()=>{
+  const handleClick = () => {
     window.open("/create/job");
 
   }
@@ -59,10 +61,12 @@ export default function Dashboard() {
                   View Candidates
                 </a>
               </div>
+
             </div>
-          </div>
-        </div>
+
+          )
+        })}
       </div>
-    </div>
-  );
+    </div>)
 }
+
