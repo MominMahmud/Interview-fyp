@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import {useState,useEffect} from "react"
 import axios from "axios";
-import { BarChart } from "../../components/charts/BarChart";
+import { BarChart } from "../../components/charts/Barchart";
 export default function Candidates() {
   const Data = [
     {
