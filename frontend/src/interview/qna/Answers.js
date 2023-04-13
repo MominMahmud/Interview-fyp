@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
-
+import Question from "./Question";
+import axios from "axios";
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -17,7 +18,7 @@ export default function App() {
   const [note, setNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
-
+  let id = "123";
   function start() {
     mic.start();
     mic.onend = () => {
@@ -61,185 +62,151 @@ export default function App() {
   };
 
   function onSubmit() {
-
-    axios.patch("http://localhost:90/candidatesRes/" + id, {
-      res: note
-
-    })
-    setNote("")
-
+    axios.post("http://localhost:90/av", {
+      id: id,
+    });
+    setNote("");
   }
 
-  let mediaRecorder
-  let recordedBlobs
+  let mediaRecorder;
+  let recordedBlobs;
 
-
-  const [startVideo,setStartVideo] = useState(false)
+  const [startVideo, setStartVideo] = useState(false);
 
   async function start() {
-
-    setStartVideo(true)
-
+    setStartVideo(true);
 
     const constaints = {
-
-      audio: {
-
-
-
-      },
+      audio: {},
       video: {
-
-        width: 1280, height: 720
-      }
-    }
-    await init(constaints)
+        width: 1280,
+        height: 720,
+      },
+    };
+    await init(constaints);
   }
 
   async function init(constaints) {
-
     try {
-
-      const stream = await navigator.mediaDevices.getUserMedia(constaints)
-      handleSuccess(stream)
-    }
-    catch (e) {
-
-      console.log(e)
+      const stream = await navigator.mediaDevices.getUserMedia(constaints);
+      handleSuccess(stream);
+    } catch (e) {
+      console.log(e);
     }
   }
 
   function handleSuccess(stream) {
+    window.stream = stream;
 
-    window.stream = stream
-
-    const gumVideo = document.querySelector('video#gum')
-    gumVideo.srcObject = stream
+    const gumVideo = document.querySelector("video#gum");
+    gumVideo.srcObject = stream;
   }
 
-
   function record() {
-
-    startRecording()
+    startRecording();
   }
 
   function stopRecording() {
-
-    mediaRecorder.stop()
+    mediaRecorder.stop();
   }
   function startRecording() {
-
-    recordedBlobs = []
+    recordedBlobs = [];
     let options = {
-
-      mimiType: 'video/webm;codecs=vp9,opus'
-    }
+      mimiType: "video/webm;codecs=vp9,opus",
+    };
 
     try {
-
-      console.log('kk')
-      mediaRecorder = new MediaRecorder(window.stream, options)
-
-    }
-    catch (e) {
-
-      console.log(e)
+      console.log("kk");
+      mediaRecorder = new MediaRecorder(window.stream, options);
+    } catch (e) {
+      console.log(e);
     }
 
-    console.log(mediaRecorder)
+    console.log(mediaRecorder);
     //recordButton.textContent = "Stop Recording"
 
-
-    mediaRecorder.start()
+    mediaRecorder.start();
     // mediaRecorder.stop = (e)=>{
 
     //   console.log("Recording is stopped")
     // }
 
-    mediaRecorder.ondataavailable = handleDataAvailable
-
-
+    mediaRecorder.ondataavailable = handleDataAvailable;
   }
 
   function handleDataAvailable(event) {
-    console.log(event)
+    console.log(event);
     if (event.data && event.data.size > 0) {
-
-      recordedBlobs.push(event.data)
-
+      recordedBlobs.push(event.data);
     }
-
-
   }
 
-  let recorded = false
-
+  let recorded = false;
 
   async function download() {
+    console.log(recordedBlobs);
+    const blob = new Blob(recordedBlobs, { type: "video/mp4" });
+    console.log(blob);
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.style.display = "none";
+    a.href = url;
+    a.download = id + ".mp4";
 
-
-
-
-    console.log(recordedBlobs)
-    const blob = new Blob(recordedBlobs, { type: 'video/mp4' })
-    console.log(blob)
-    const url = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.style.display = 'none'
-    a.style.display = 'none'
-    a.href = url
-    a.download = id + '.mp4'
-
-    document.body.appendChild(a)
-    a.click()
+    document.body.appendChild(a);
+    a.click();
 
     setTimeout(() => {
-
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-    }, 100)
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
   }
 
   function stop() {
-
-
-    mediaRecorder.stop()
-
+    mediaRecorder.stop();
   }
   return (
     <>
-
       {/* <div id="background"></div>
       <div className="interview-section">
         <div className="section">
             <img src={logo} className="logo"></img> */}
-       <Question index={nextQuestion}></Question> 
+      <Question index={nextQuestion}></Question>
 
-      <div >
-        
-      </div>
+      <div></div>
 
       <div>
-      {startVideo
-        ? <video src='' id='gum' playsInline autoPlay muted ></video>
-        : <h4 className="my-5">Press Start to Initiate Interview</h4>
-      }
-    </div>
+        {startVideo ? (
+          <video src="" id="gum" playsInline autoPlay muted></video>
+        ) : (
+          <h4 className="my-5">Press Start to Initiate Interview</h4>
+        )}
+      </div>
 
-          
-      <button id='start' className="btn btn-outline-primary" onClick={start}>Start </button>
-      <button id='record'className="btn btn-danger" onClick={record}>Record</button>
+      <button id="start" className="btn btn-outline-primary" onClick={start}>
+        Start{" "}
+      </button>
+      <button id="record" className="btn btn-danger" onClick={record}>
+        Record
+      </button>
 
-      <button id='play' className="btn btn-outline-primary"onClick={stop}>Stop</button>
-      <button id='download' className="btn btn-outline-success"onClick={download}>Save</button>
+      <button id="play" className="btn btn-outline-primary" onClick={stop}>
+        Stop
+      </button>
       <button
-            onClick={() =>
-              setNextQuestion((nextQuestion) => (nextQuestion += 1))
-            }
-            className="btn btn-outline-primary"
-          >
-            Next Question
-          </button>
+        id="download"
+        className="btn btn-outline-success"
+        onClick={download}
+      >
+        Save
+      </button>
+      <button
+        onClick={() => setNextQuestion((nextQuestion) => (nextQuestion += 1))}
+        className="btn btn-outline-primary"
+      >
+        Next Question
+      </button>
       {/* </div>
           <button className="btn btn-danger" onClick={start} disabled={isRecording}>
             Record
@@ -266,9 +233,11 @@ export default function App() {
           </div>
             <audio src={blobURL} controls="controls" title="1" download />*/}
       <div>
-        <button className="btn btn-outline-success submit" onClick={onSubmit}>Submit</button></div>
+        <button className="btn btn-outline-success submit" onClick={onSubmit}>
+          Submit
+        </button>
+      </div>
       {/*</div> */}
-
     </>
   );
 }
