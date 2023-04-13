@@ -17,6 +17,36 @@ export default function Candidates() {
     px: 4,
     pb: 3,
   };
+  const queryParameters = new URLSearchParams(window.location.search);
+  const id = queryParameters.get("id");
+  const [job, setJob] = useState("");
+  var [candidates, setCandidates] = useState([]);
+  var url = "http://localhost:90/jobs";
+  var url2 = "http://localhost:90/candidates";
+  url = url + "/" + id;
+  console.log(url);
+  useEffect(() => {
+    axios
+      .get(url)
+      .then((res) => {
+        console.log(res.data);
+        setJob(res.data);
+        url2 = url2 + "/" + res.data;
+      })
+      .then(() => {
+        axios.get(url2).then(async (cand) => {
+          await setCandidates(cand.data);
+        });
+      });
+  }, []);
+
+  console.log(candidates);
+
+  //console.log(candidates[0].name)
+  const [candidateID,setID]=useState({});
+  const [candidateResp,setCandidateResp] = useState([{
+
+  }]);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
