@@ -65,11 +65,6 @@ emotion_dict1 = {
     "surprise": 0,
 }
 # emotion_dict1 = { "angry":0, "disgust":0, "fear":0, "happy":0, "sad":0,  "surprise":0,"neutral":0}
-<<<<<<< HEAD
-
-=======
-cap = cv2.VideoCapture("12.mp4")
->>>>>>> parent of d14d1357 (zz)
 lastemotions = list()
 # current_emotion_count=3
 emotions = [0, 0, 0, 0, 0, 0, 0]
@@ -134,16 +129,11 @@ def return_percentage_listv(li):
 
 
 def audioVideoEmotion(address):
-<<<<<<< HEAD
     cap = cv2.VideoCapture(address)
 
     # clip1 = VideoFileClip(address)
     # print(address)
     # clip1.audio.write_audiofile("test1.wav")
-=======
-    clip1 = VideoFileClip(address)
-    clip1.audio.write_audiofile("Audios//test1.wav")
->>>>>>> parent of d14d1357 (zz)
     while True:
         ret, frame = cap.read()
         if ret == False:
@@ -185,37 +175,18 @@ def audioVideoEmotion(address):
     # print(list(emotion_dict1.values()))
     # print(list(emotion_dict1.keys()))
     # print(input_main('Audios//test1.wav'))
-<<<<<<< HEAD
     ffmpeg_tools.ffmpeg_extract_audio(address, "test.wav")
-=======
->>>>>>> parent of d14d1357 (zz)
     print(return_emoion_list())
     return (
         list(emotion_dict1.keys()),
         list(emotion_dict1.values()),
-<<<<<<< HEAD
         input_main("test.wav"),
-=======
-        input_main("Audios//test1.wav"),
->>>>>>> parent of d14d1357 (zz)
         return_emoion_list(),
     )
 
 
-<<<<<<< HEAD
 app = Flask(__name__)
 
-=======
-(
-    videoemotionlabels,
-    videoemotionpercentages,
-    audioemotiopercentages,
-    audioemotionlabels,
-) = audioVideoEmotion("12.mp4")
-
-
-app = Flask(__name__)
->>>>>>> parent of d14d1357 (zz)
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
@@ -484,11 +455,7 @@ def get_specificjobs():
 # @cross_origin()
 def getID_cand(email):
     try:
-<<<<<<< HEAD
         canData = list(db.candidates.find({"email": email}))
-=======
-        canData = list(db.candidates.find({"email": email}, {"_id": 1}))
->>>>>>> parent of d14d1357 (zz)
         print(email)
         str(canData)
         #   print(str(canData))
@@ -527,7 +494,6 @@ def emotionsWithId:
 print(videoemotionlabels)
 
 
-<<<<<<< HEAD
 @cross_origin(supports_credentials=True)
 @app.route("/av", methods=["POST"])
 def insert_labels():
@@ -544,13 +510,6 @@ def insert_labels():
     try:
         labels = {
             "_id": v_id,
-=======
-@app.route("/av", methods=["POST"])
-def insert_labels():
-    print(videoemotionlabels[0])
-    try:
-        labels = {
->>>>>>> parent of d14d1357 (zz)
             "labelsV": videoemotionlabels,
             "valueV": videoemotionpercentages,
             "labelsA": audioemotionlabels,
@@ -575,11 +534,7 @@ labelsGlobal = []
 @app.route("/gav/<id>", methods=["GET"])
 def get_labels(id):
     try:
-<<<<<<< HEAD
         labelsGlobal = list(db.labels.find({"_id": id}))
-=======
-        labelsGlobal = list(db.labels.find({"_id": ObjectId(id)}))
->>>>>>> parent of d14d1357 (zz)
         for q in labelsGlobal:
             q["_id"] = str(q["_id"])
         return Response(
