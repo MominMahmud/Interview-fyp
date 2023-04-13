@@ -3,17 +3,6 @@ import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 77 },
-  { id: 6, lastName: "Melisandre", firstName: "Catie", age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-];
-
 export default function Candidates() {
   const style = {
     position: "absolute",
@@ -102,11 +91,14 @@ export default function Candidates() {
               aria-describedby="child-modal-description"
             >
               <Box sx={{ width: 200, ...style }}>
-                <h2 id="child-modal-title">Text in a child modal</h2>
-                <p id="child-modal-description">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                </p>
-                <button className='btn btn-primary'onClick={handleClose}>Close</button>
+                <h2 id="child-modal-title">Responses</h2>
+                 {console.log(candidateResp[0])}
+                {candidateResp[0]["res"]?.map((n) => 
+               <p key={n}>{n}</p>  )}  
+                <p id="child-modal-description">{candidateID["res"]}</p>
+                <button className="btn btn-primary" onClick={handleClose}>
+                  Close
+                </button>
               </Box>
             </Modal>
           </div>
