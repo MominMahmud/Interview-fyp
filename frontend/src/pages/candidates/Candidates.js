@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import {useState,useEffect} from "react"
 import axios from "axios";
+import { BarChart } from "../../components/charts/BarChart";
 export default function Candidates() {
   const Data = [
     {
@@ -172,10 +173,8 @@ export default function Candidates() {
             >
               <Box sx={{ width: 200, ...style }}>
                 <h2 id="child-modal-title">Responses</h2>
-                 {console.log(candidateResp[0])}
-                {candidateResp[0]["res"]?.map((n) => 
-               <p key={n}>{n}</p>  )}  
-                <p id="child-modal-description">{candidateID["res"]}</p>
+
+                <BarChart chartData={chartData}></BarChart>
                 <button className="btn btn-primary" onClick={handleClose}>
                   Close
                 </button>
