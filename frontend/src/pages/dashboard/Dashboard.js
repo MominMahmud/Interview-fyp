@@ -32,10 +32,15 @@ export default function Dashboard() {
     setOpen(false);
   };
 
+  const handleClick = ()=>{
+    window.open("/create/job");
+
+  }
+
   return (
     
     <div className="dashboard">
-      <button className="btn btn-outline-success ">Create</button>
+      <button className="btn btn-outline-success " onClick={handleClick}>Create</button>
       <div className="grid">
         {jobss.map((post) => {
           const { _id, name, desc, skills, edu, exp } = post;

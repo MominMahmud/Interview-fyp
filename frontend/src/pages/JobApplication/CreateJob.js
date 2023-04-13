@@ -45,11 +45,7 @@ export default function CreateJob() {
     console.log(showJobForm);
   }
 
-  const questions = [
-    "Where do you see yourself in five years?",
-    "What would you do if your client is making unreasonable demands?",
-    "What will be your stance if your team is not replying?",
-  ];
+  const questions = ["What is your name?", "Why do you want to work here?", "What about this position made you want to apply?", "How familiar are you with our company and what we do?"]
   const [selectedQuestions, setSelectedQuestions] = useState([]);
 
   return (
