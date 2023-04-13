@@ -192,6 +192,7 @@ export default function Candidates() {
         pageSize={5}
         checkboxSelection
         disableSelectionOnClick
+        getRowId={(row) => row._id}
       />
     </div>
   );
