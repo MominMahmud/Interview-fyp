@@ -37,7 +37,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      <button className="btn btn-outline-success ">Create</button>
+      <button className="btn btn-outline-success" onClick={handleClick}>Create</button>
       <div className="grid">
         {jobss.map((post) => {
           const { _id, name, desc, skills, edu, exp } = post;

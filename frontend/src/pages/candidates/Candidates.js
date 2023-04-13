@@ -2,7 +2,8 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import {useState,useEffect} from "react"
+import axios from "axios";
 export default function Candidates() {
   const style = {
     position: "absolute",
@@ -139,7 +140,7 @@ export default function Candidates() {
   return (
     <div style={{ height: 500 }} className="table">
       <DataGrid
-        rows={rows}
+        rows={candidates}
         columns={columns}
         pageSize={5}
         checkboxSelection
