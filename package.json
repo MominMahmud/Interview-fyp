@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@mui/icons-material": "^5.11.0",
-    "mic-recorder-to-mp3": "^2.2.2",
-    "react-hook-form": "^7.41.5"
-  }
-}

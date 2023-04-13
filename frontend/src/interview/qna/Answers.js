@@ -1,11 +1,5 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
-import Question from "./Question";
-import logo from '../../images/loggg.png'
-import axios from 'axios'
-import { useParams } from "react-router-dom";
-
-
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 const SpeechRecognition =
@@ -17,59 +11,53 @@ mic.interimResults = true;
 mic.lang = "en-US";
 
 export default function App() {
-  const [stopRec, setStopRec] = useState(false)
-  const [downloadRec, setDownloadRec] = useState(false)
   const [isRecording, setRecording] = useState(false);
   const [blobURL, setBlob] = useState("");
   const [isBlocked, setBlocked] = useState(false);
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
 
-  const { id } = useParams();
-  console.log(id);
-  // function start() {
-  // mic.start();
-  // mic.onend = () => {
-  //   console.log("continue..");
-  //   mic.start();
-  // };
-  // mic.onstart = () => {
-  //   console.log("Mics on");
-  // };
-
-  // mic.onresult = (event) => {
-  //   const transcript = Array.from(event.results)
-  //     .map((result) => result[0])
-  //     .map((result) => result.transcript)
-  //     .join("");
-  //   console.log(transcript);
-  //   setNote(transcript);
-  //   mic.onerror = (event) => {
-  //     console.log(event.error);
-  //   };
-  // };
-  //}
+  function start() {
+    mic.start();
+    mic.onend = () => {
+      console.log("continue..");
+      mic.start();
+    };
+    mic.onstart = () => {
+      console.log("Mics on");
+    };
+    Mp3Recorder.start()
+      .then(() => {
+        setRecording(true);
+      })
+      .catch((e) => console.error(e));
+    mic.onresult = (event) => {
+      const transcript = Array.from(event.results)
+        .map((result) => result[0])
+        .map((result) => result.transcript)
+        .join("");
+      console.log(transcript);
+      setNote(transcript);
+      mic.onerror = (event) => {
+        console.log(event.error);
+      };
+    };
+  }
 
   function stop() {
-    setRecording(!isRecording);
-    mic.stop();
-    mic.onend = () => {
-      console.log("Stopped Mic on Click");
-    };
     Mp3Recorder.stop()
       .getMp3()
       .then(([buffer, blob]) => {
         const blobURL = URL.createObjectURL(blob);
         setBlob(blobURL);
-        console.log(blobURL)
         setRecording(false);
       })
       .catch((e) => console.log(e));
   }
   const handleSaveNote = () => {
     setSavedNotes([...savedNotes, note]);
-    ;
+    setNote("");
   };
 
   function onSubmit() {

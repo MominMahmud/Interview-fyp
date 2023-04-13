@@ -1,37 +1,33 @@
 * {
   margin: 0;
-  font-family: "Poppins";
 }
 .profileBackground {
-  position: fixed;
-  width: 20%;
+  position: absolute;
+  width: 270px;
   height: 221px;
   left: 0px;
   top: 0px;
   background: #000c8e;
   box-shadow: 4px 7px 4px rgba(0, 0, 0, 0.12);
-  z-index: 2;
 }
 
 .profilePicture {
-  position: fixed;
-  width: 10%;
-  height: 20%;
-  left: 5%;
-
+  position: absolute;
+  width: 101px;
+  height: 108px;
+  left: 78px;
   top: 40px;
   border-radius: 50%;
-  z-index: 10;
 }
 
 .profileText {
-  position: fixed;
-  width: 10%;
-  height: 10%;
-  left: 5%;
+  position: absolute;
+  width: 116px;
+  height: 25px;
+  left: 74px;
   top: 150px;
-  z-index: 10;
 
+  font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
   font-size: 14px;
@@ -42,9 +38,9 @@
 }
 
 .sideNavBackground {
-  width: 20%;
+  width: 270px;
   height: 100vh;
-  position: fixed;
+
   background: #2a36b8;
   box-shadow: 14px -2px 18px rgba(0, 0, 0, 0.16);
 }
@@ -52,9 +48,9 @@
 .header {
   box-sizing: border-box;
   position: absolute;
-  width: 82%;
+  width: 963px;
   height: 60px;
-  margin-left: 20%;
+  left: 270px;
   top: 0px;
   background: #f8f8f8;
   border: 1px solid rgba(0, 0, 0, 0.27);
@@ -67,7 +63,7 @@
 }
 .headerText {
   position: relative;
-  width: 250px;
+  width: 149px;
   height: 21px;
   left: 50px;
   top: 20px;
@@ -86,35 +82,9 @@
   position: absolute;
   top:100px;
   left:320px;
-  
-
-}
-.create-job{
-
-  
-  width:50%;
-  margin-left:auto;
-  margin-right: auto;
-  margin-top: 130px;
-  z-index: 20;
-  
 
 }
 
-.hideJobForm{
-
-  display:none
-}
-
-
-input[type=checkbox]{
-
-  display: inline;
-}
-button{
-
-  margin:0
-}
 .progress{
 
   width:75%;
@@ -149,108 +119,3 @@ button{
   position: absolute;
 }
 
-video{
-
-  width: 400px;
-}
-
-.interview-section{
-
-  margin:60px 150px 150px 300px;
-  text-align: center;
-  position: absolute;
-  width:50%;
-  background-color: #e9f2ff ;
-  border-radius: 5px;
-  height:80vh;
-  z-index:5;
-  box-shadow: 10px;
-  
-}
-
-.answer{
-
-  background-color:#2530a7;
-  position: absolute;
-  width: 100%;
-  height:100vh
-  
-}
-
-
-.logo{
-
-  width:50%;
-  
-}
-
-#background {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 50%;
-  height: 100%;
-  background-color: #c9dcf8 ;
-  z-index: 1;
-}
-
-.listen-margin{
-
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-
-audio{
-  display: block;
-  width:50%;
-  margin:auto;
-}
-.submit{
-
-  margin-top: 20px;
-}
-.box{
-
-  
-  z-index: 20;
-  margin-left: 20%;
-  
-}
-
-
-.grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr ;
-  gap:1.6rem;
-  margin-top:1rem
-}
-
-.card-title{
-
-  font-weight: bold;
-  color:#2530a7
-}
-
-h3{
-
-  color:#000c8e;
-  font-weight: bold;
-  text-align: center;
-}
-
-
-.jobApplication{
-
-
-  z-index: 20;
-}
-
-.drop-down{
-
-  font-size: 20px;
-}
-.create-job{
-
-
-}

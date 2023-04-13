@@ -1,6 +1,6 @@
-import { useSpeechSynthesis } from "react-speech-kit";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useSpeechSynthesis } from 'react-speech-kit';
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 function Question(props) {
   //var [questions, setQuestions] = useState("");
   const [text, setText] = useState("");
@@ -49,4 +49,8 @@ function Question(props) {
     </>
   );
 }
-export default Question;
+export default Question
+
+
+
+

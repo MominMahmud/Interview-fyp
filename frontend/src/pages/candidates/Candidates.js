@@ -1,42 +1,19 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Chart from "chart.js/auto";
-import { BarChart } from "../../components/charts/BarChart";
-const Data = [
-  {
-    id: 1,
-    year: 2016,
-    userGain: 80000,
-    userLost: 823
-  },
-  {
-    id: 2,
-    year: 2017,
-    userGain: 45677,
-    userLost: 345
-  },
-  {
-    id: 3,
-    year: 2018,
-    userGain: 78888,
-    userLost: 555
-  },
-  {
-    id: 4,
-    year: 2019,
-    userGain: 90000,
-    userLost: 4555
-  },
-  {
-    id: 5,
-    year: 2020,
-    userGain: 4300,
-    userLost: 234
-  }
-]
+
+const rows = [
+  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
+  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
+  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
+  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 77 },
+  { id: 6, lastName: "Melisandre", firstName: "Catie", age: 150 },
+  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
+  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
+  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+];
+
 export default function Candidates() {
   const style = {
     position: "absolute",
@@ -51,133 +28,56 @@ export default function Candidates() {
     px: 4,
     pb: 3,
   };
-  const [chartData, setChartData] = useState({
-    labels: Data.map((data) => data.year), 
-    datasets: [
-      {
-        label: "Users Gained ",
-        data: Data.map((data) => data.userGain),
-        backgroundColor: [
-          "rgba(75,192,192,1)",
-          "&quot;#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0"
-        ],
-        borderColor: "black",
-        borderWidth: 2
-      }
-    ]
-  });
-  const queryParameters = new URLSearchParams(window.location.search);
-  const id = queryParameters.get("id");
-  const [job, setJob] = useState("");
-  var [candidates, setCandidates] = useState([]);
-  var url = "http://localhost:90/jobs";
-  var url2 = "http://localhost:90/candidates";
-  url = url + "/" + id;
-  console.log(url);
-  useEffect(() => {
-    axios
-      .get(url)
-      .then((res) => {
-        console.log(res.data);
-        setJob(res.data);
-        url2 = url2 + "/" + res.data;
-      })
-      .then(() => {
-        axios.get(url2).then((cand) => {
-          setCandidates(cand.data);
-        });
-      });
-  }, []);
-
-  console.log(candidates);
-
-  //console.log(candidates[0].name)
-  const [candidateID,setID]=useState({});
-  const [candidateResp,setCandidateResp] = useState([{
-
-  }]);
   const [open, setOpen] = React.useState(false);
-  
-
-
-  const handleClose = (params) => {
-    console.log(params);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
     setOpen(false);
-    setCandidateResp([{
-      name: "",
-      email: "",
-      age: "",
-      experience: "",
-      status: "0",
-      ranking: "0",
-      score: "0",
-      appliedfor: "",
-      res:[]
-    }])
   };
   const columns = [
+    { field: "id", headerName: "ID", width: 100 },
     {
-      field: "_id",
-      headerName: "id",
-      width: 50,
+      field: "firstName",
+      headerName: "First name",
+      width: 150,
       editable: true,
     },
-
     {
-      field: "name",
-      headerName: "Name",
+      field: "lastName",
+      headerName: "Last name",
       width: 150,
       editable: true,
     },
     {
       field: "age",
       headerName: "Age",
-      type: "string",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "experience",
-      headerName: "Experience",
-      type: "string",
+      type: "number",
       width: 110,
       editable: true,
     },
     {
-      field: "status",
-      headerName: "Status",
-      type: "string",
-      sortable: true,
-      width: 100,
+      field: "fullName",
+      headerName: "Full name",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${params.getValue(params.id, "firstName") || ""} ${
+          params.getValue(params.id, "lastName") || ""
+        }`,
     },
-
-    {
-      field: "ranking",
-      headerName: "Rank",
-      type: "string",
-      sortable: true,
-      width: 100,
-    },
-
     {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 120,
       sortable: false,
       renderCell: (params) => {
         const onClick = (e) => {
-          
-
           e.stopPropagation(); // don't select this row after clicking
 
           const api = params.api;
-          const thisRow = {
- 
-
-          };
+          const thisRow = {};
 
           api
             .getAllColumns()
@@ -185,34 +85,28 @@ export default function Candidates() {
             .forEach(
               (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             );
-            setID(thisRow)
-            setCandidateResp(candidates.filter(async (data)=>{
-              
-              return await data._id===candidateID._id;
-            }))
-            
-            setOpen(true)
-          return alert(JSON.stringify(thisRow._id, null, 4));
+
+          return alert(JSON.stringify(thisRow, null, 4));
         };
 
         return (
           <div>
-            <button className="btn btn-primary" onClick={onClick}>
+            <button className="btn btn-primary" onClick={handleOpen}>
               Responses
             </button>
             <Modal
+              hideBackdrop
               open={open}
               onClose={handleClose}
               aria-labelledby="child-modal-title"
               aria-describedby="child-modal-description"
             >
               <Box sx={{ width: 200, ...style }}>
-                
-                 <BarChart chartData={chartData}></BarChart>
-                <p id="child-modal-description">{candidateID["res"]}</p>
-                <button className="btn btn-primary" onClick={handleClose}>
-                  Close
-                </button>
+                <h2 id="child-modal-title">Text in a child modal</h2>
+                <p id="child-modal-description">
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                </p>
+                <button className='btn btn-primary'onClick={handleClose}>Close</button>
               </Box>
             </Modal>
           </div>
@@ -223,12 +117,11 @@ export default function Candidates() {
   return (
     <div style={{ height: 500 }} className="table">
       <DataGrid
-        rows={candidates}
+        rows={rows}
         columns={columns}
-        pageSize={30}
+        pageSize={5}
         checkboxSelection
         disableSelectionOnClick
-        getRowId={(row) => row._id}
       />
     </div>
   );

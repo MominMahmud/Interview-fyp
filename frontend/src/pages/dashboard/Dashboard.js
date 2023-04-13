@@ -1,9 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Card from "../../components/card/Card";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import axios from "axios";
-
 export default function Dashboard() {
   const [jobss, setMyJobs] = useState([]);
   useEffect(() => {
@@ -38,7 +34,6 @@ export default function Dashboard() {
   }
 
   return (
-    
     <div className="dashboard">
       <button className="btn btn-outline-success " onClick={handleClick}>Create</button>
       <div className="grid">
@@ -65,8 +60,8 @@ export default function Dashboard() {
                 </a>
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
     </div>
   );

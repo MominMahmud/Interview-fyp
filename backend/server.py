@@ -131,8 +131,10 @@ def return_percentage_listv(li):
 
 def audioVideoEmotion(address):
     cap = cv2.VideoCapture(address)
-    clip1 = VideoFileClip(address)
-    clip1.audio.write_audiofile("Audios//test1.wav")
+
+    # clip1 = VideoFileClip(address)
+    # print(address)
+    # clip1.audio.write_audiofile("test1.wav")
     while True:
         ret, frame = cap.read()
         if ret == False:
@@ -174,26 +176,28 @@ def audioVideoEmotion(address):
     # print(list(emotion_dict1.values()))
     # print(list(emotion_dict1.keys()))
     # print(input_main('Audios//test1.wav'))
+    ffmpeg_tools.ffmpeg_extract_audio(address, "test.wav")
     print(return_emoion_list())
     return (
         list(emotion_dict1.keys()),
         list(emotion_dict1.values()),
-        input_main("Audios//test1.wav"),
+        input_main("test.wav"),
         return_emoion_list(),
     )
 
 
 app = Flask(__name__)
-CORS(app, support_credentials=True)
+
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
-app.config["MAIL_USERNAME"] = "i190633@nu.edu.pk"
-app.config["MAIL_PASSWORD"] = "Metalmgsv@5"
+app.config["MAIL_USERNAME"] = "labeeb0316@gmail.com"
+app.config["MAIL_PASSWORD"] = "vnipwxczbsxjiphl"
 app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 # CORS(app)
+CORS(app, support_credentials=True)
 
 print(
     "Hello ************************************************************* WORD************************888"
@@ -452,7 +456,7 @@ def get_specificjobs():
 # @cross_origin()
 def getID_cand(email):
     try:
-        canData = list(db.candidates.find({"email": email}, {"_id": 1}))
+        canData = list(db.candidates.find({"email": email}))
         print(email)
         str(canData)
         #   print(str(canData))
@@ -484,11 +488,12 @@ def getID_cand(email):
         )
 
 
+@cross_origin(supports_credentials=True)
 @app.route("/av", methods=["POST"])
 def insert_labels():
     v_id = request.json["id"]
-    fpath = "./public/" + v_id + ".mp4"
-    print(v_id)
+    fpath = v_id + ".mp4"
+    print(fpath)
     (
         videoemotionlabels,
         videoemotionpercentages,
@@ -523,7 +528,7 @@ labelsGlobal = []
 @app.route("/gav/<id>", methods=["GET"])
 def get_labels(id):
     try:
-        labelsGlobal = list(db.labels.find({"_id": ObjectId(id)}))
+        labelsGlobal = list(db.labels.find({"_id": id}))
         for q in labelsGlobal:
             q["_id"] = str(q["_id"])
         return Response(
