@@ -74,10 +74,11 @@ export default function App() {
   let recordedBlobs
 
 
+  const [startVideo,setStartVideo] = useState(false)
 
   async function start() {
 
-
+    setStartVideo(true)
 
 
     const constaints = {
@@ -212,17 +213,33 @@ export default function App() {
       <div className="interview-section">
         <div className="section">
             <img src={logo} className="logo"></img> */}
-      {/* <Question index={nextQuestion}></Question> */}
+       <Question index={nextQuestion}></Question> 
 
       <div >
-        <video src='' id='gum' playsInline autoPlay muted ></video>
+        
       </div>
 
-      <button id='start' onClick={start}>Start </button>
-      <button id='record' onClick={record}>Record</button>
+      <div>
+      {startVideo
+        ? <video src='' id='gum' playsInline autoPlay muted ></video>
+        : <h4 className="my-5">Press Start to Initiate Interview</h4>
+      }
+    </div>
 
-      <button id='play' onClick={stop}>Stop</button>
-      <button id='download' onClick={download}>Save</button>
+          
+      <button id='start' className="btn btn-outline-primary" onClick={start}>Start </button>
+      <button id='record'className="btn btn-danger" onClick={record}>Record</button>
+
+      <button id='play' className="btn btn-outline-primary"onClick={stop}>Stop</button>
+      <button id='download' className="btn btn-outline-success"onClick={download}>Save</button>
+      <button
+            onClick={() =>
+              setNextQuestion((nextQuestion) => (nextQuestion += 1))
+            }
+            className="btn btn-outline-primary"
+          >
+            Next Question
+          </button>
       {/* </div>
           <button className="btn btn-danger" onClick={start} disabled={isRecording}>
             Record
