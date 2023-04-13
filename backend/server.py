@@ -72,7 +72,7 @@ emotions = [0, 0, 0, 0, 0, 0, 0]
 
 def extract_mfcc1(file):
     y, sr = librosa.load(file, duration=3, offset=0.5)
-    mfcc = np.mean(librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40).T, axis=0)
+    mfcc = np.mean(librosa.feature.mfcc(y=y, sr=sr, n_mfcc=128).T, axis=0)
     return np.expand_dims(np.array(list(mfcc)), -1)
 
 
@@ -485,13 +485,6 @@ def getID_cand(email):
             status=500,
             mimetype="application/json",
         )
-@app.route("/user/id", methods=["POST"])
-def emotionsWithId:
-    id = request.form["id"]
-
-    
-
-print(videoemotionlabels)
 
 
 @cross_origin(supports_credentials=True)
