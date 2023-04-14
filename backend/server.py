@@ -31,6 +31,7 @@ from pydub import silence as si
 import speech_recognition as sr
 from textblob import TextBlob
 
+
 dic = {
     "happy": 0,
     "sad": 0,
@@ -40,7 +41,7 @@ dic = {
     "angry": 0,
     "Surprise": 0,
 }
-model1 = keras.models.load_model("speechmodel")
+# model1 = keras.models.load_model("speechmodel")
 hello = list(dic.keys())
 hello1 = list()
 for i in hello:
@@ -87,6 +88,7 @@ def speech_input(filename):
     dic["fear"] = 0
     dic["angry"] = 0
     dic["Surprise"] = 0
+    model1 = keras.models.load_model("speechmodel")
     input_mfcc = extract_mfcc1(filename)
     result = model1.predict(input_mfcc)
     result1 = enc.inverse_transform(result)
@@ -179,6 +181,7 @@ def audioVideoEmotion(address):
     # print(list(emotion_dict1.keys()))
     # print(input_main('Audios//test1.wav'))
     ffmpeg_tools.ffmpeg_extract_audio(address, "test.wav")
+
     print(return_emoion_list())
     return (
         list(emotion_dict1.keys()),
@@ -201,7 +204,7 @@ def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
 
 
 def audio_text_anlysis(address):
-    sound = AudioSegment.from_file("Audios//test2.wav", format="wav")
+    sound = AudioSegment.from_file("test.wav", format="wav")
 
     start_trim = detect_leading_silence(sound)
     end_trim = detect_leading_silence(sound.reverse())
@@ -223,19 +226,20 @@ def audio_text_anlysis(address):
     speech_to_silence_ratio = total_speach_duration / total_silence_duration
     audio_length_in_minutes = sound.duration_seconds / 60
 
-    # print("Speech-to-silence ratio:", speech_to_silence_ratio)
+    print("Speech-to-silence ratio:", speech_to_silence_ratio)
     avg_silence_duration = np.mean(gaps)
-    # print("Average_silence duration:",avg_silence_duration)
+    print("Average_silence duration:", avg_silence_duration)
     Avg_silence_dur_per_minute = total_silence_duration / audio_length_in_minutes
-    # print("Average_silence duration per minute :",Avg_silence_dur_per_minute)
+    print("Average_silence duration per minute :", Avg_silence_dur_per_minute)
     recognizer = sr.Recognizer()
 
     # Load the audio file
-    with sr.AudioFile("Audios//test2.wav") as source:
+    with sr.AudioFile("test.wav") as source:
         audio_data = recognizer.record(source)
-
+    print(audio_data)
     # Convert speech to text
-    text = recognizer.recognize_google(audio_data, language="en-US")
+    text = recognizer.recognize_google(audio_data)
+    # text = dic_show['alternative'][0]['transcript']
     speaker_text = text
     blob = TextBlob(text)
     words = text.split()
@@ -252,11 +256,14 @@ def audio_text_anlysis(address):
         sentiment = "Neutral"
     else:
         sentiment = "Negative"
-    # print("Number of unique words:", num_unique_words)
+    print("Number of unique words:", num_unique_words)
     unique_words_to_total_no_of_words_ratio = num_unique_words / len(words)
-    # print("unque words to total number of words ratio:",unique_words_to_total_no_of_words_ratio)
+    print(
+        "unque words to total number of words ratio:",
+        unique_words_to_total_no_of_words_ratio,
+    )
     rate_of_words_per_minute = len(words) / audio_length_in_minutes
-    # print("rate of words per minute:",rate_of_words_per_minute)
+    print("rate of words per minute:", rate_of_words_per_minute)
     return (
         speaker_text,
         silence,
@@ -576,8 +583,9 @@ def getID_cand(email):
 @cross_origin(supports_credentials=True)
 @app.route("/av", methods=["POST"])
 def insert_labels():
-    v_id = request.json["id"]
-    fpath = v_id + ".mp4"
+    # v_id = request.json["id"]
+    # # fpath = v_id + ".mp4"
+    fpath = "123.mp4"
     print(fpath)
     (
         videoemotionlabels,
@@ -585,14 +593,37 @@ def insert_labels():
         audioemotiopercentages,
         audioemotionlabels,
     ) = audioVideoEmotion(fpath)
+    (
+        speakText,
+        silence,
+        StoSR,
+        avgSDUR,
+        avgSPM,
+        numUnique,
+        uniqueWords,
+        rateWPM,
+        sentiment,
+    ) = audio_text_anlysis(fpath)
 
     try:
         labels = {
-            "_id": v_id,
             "labelsV": videoemotionlabels,
             "valueV": videoemotionpercentages,
             "labelsA": audioemotionlabels,
             "valuesA": audioemotiopercentages,
+            "labelsV": videoemotionlabels,
+            "valueV": videoemotionpercentages,
+            "labelsA": audioemotionlabels,
+            "valuesA": audioemotiopercentages,
+            "speakerText": speakText,
+            "silence": silence,
+            "StoSR": StoSR,
+            "avgSDUR": avgSDUR,
+            "avgSPM": avgSPM,
+            "numUnique": numUnique,
+            "uniqueWords": uniqueWords,
+            "rateWPM": rateWPM,
+            "sentiment": sentiment,
         }
         print(labels)
         dbResponse = db.labels.insert_one(labels)
@@ -625,25 +656,61 @@ def get_labels(id):
         print(e)
 
 
-print(labelsGlobal)
+# print(labelsGlobal)
 
 
 # @cross_origin(supports_credentials=True)
-# @app.route("/saver", methods=["POST"])
+# @app.route("/av", methods=["POST"])
 # def insert_metrics():
-#  #   v_id = request.json["id"]
-#   #  fpath = v_id + ".mp4"
+#     # v_id = request.json["id"]
+#     # fpath = v_id + ".mp4"
+#     fpath = "test.wav"
+#     # print("RESULT ****************" + audio_text_anlysis(fpath))
+#     (
+#         speakText,
+#         silence,
+#         StoSR,
+#         avgSDUR,
+#         avgSPM,
+#         numUnique,
+#         uniqueWords,
+#         rateWPM,
+#         sentiment,
+#     ) = audio_text_anlysis(fpath)
+#     (
+#         videoemotionlabels,
+#         videoemotionpercentages,
+#         audioemotiopercentages,
+#         audioemotionlabels,
+#     ) = audioVideoEmotion(fpath)
+
+#     print(
+#         "################################################################################################################################################"
+#     )
+
+#     print(speakText)
+#     print(silence)
+#     print(StoSR)
+#     print(avgSDUR)
 
 #     try:
-#         labels = {
-
-#             "speakerText": videoemotionlabels,
-#             "silence": videoemotionpercentages,
-#             "SpeechtoSilenceR": audioemotionlabels,
-#             "valuesA": audioemotiopercentages,
+#         valuesSaver = {
+# "labelsV": videoemotionlabels,
+# "valueV": videoemotionpercentages,
+# "labelsA": audioemotionlabels,
+# "valuesA": audioemotiopercentages,
+# "speakerText": speakText,
+# "silence": silence,
+# "StoSR": StoSR,
+# "avgSDUR": avgSDUR,
+# "avgSPM": avgSPM,
+# "numUnique": numUnique,
+# "uniqueWords": uniqueWords,
+# "rateWPM": rateWPM,
+# "sentiment": sentiment,
 #         }
-#         print(labels)
-#         dbResponse = db.labels.insert_one(labels)
+
+#         dbResponse = db.labels.insert_one(valuesSaver)
 #         return Response(
 #             response=json.dumps(
 #                 {"message": "Label Inserted", "id": f"{dbResponse.inserted_id}"}
