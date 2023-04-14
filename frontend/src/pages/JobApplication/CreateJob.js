@@ -4,6 +4,22 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 export default function CreateJob() {
+
+  var [questions, setQuestions] = useState([]);
+  useEffect(() => {
+    questions = []
+    axios.get("http://localhost:90/getQuestions").then((res) => {
+      setQuestions([])
+      //setQuestions(res.data);
+      console.log(res.data);
+
+      for(let i =0;i<res.data.length;i++){
+        questions = [...questions, res.data[i].text]
+      }
+      setQuestions(questions);
+      console.log(questions)
+    });
+  },[])
   const [job, setJob] = useState({
     name: "",
     desc: "",
@@ -39,22 +55,19 @@ export default function CreateJob() {
   };
 
   const [showJobForm, setShowJobForm] = useState(true);
-  function setQuestions(e) {
+  function setQuestionsToTrue(e) {
     e.preventDefault();
     setShowJobForm(false);
     console.log(showJobForm);
   }
 
-  const questions = [
-    "Where do you see yourself in five years?",
-    "What would you do if your client is making unreasonable demands?",
-    "What will be your stance if your team is not replying?",
-  ];
+
   const [selectedQuestions, setSelectedQuestions] = useState([]);
 
   return (
     <div>
-      <Box className="box">
+      
+      <Box className="box-box">
         <div className="create-job">
           <form className={showJobForm ? "" : "hideJobForm"}>
             <div className="row">
@@ -115,14 +128,17 @@ export default function CreateJob() {
               </div>
             </div>
             <div className="my-3 d-flex flex-row-reverse">
-              <button className="btn btn-primary " onClick={setQuestions}>
+              <button className="btn btn-primary " onClick={setQuestionsToTrue}>
                 Next
               </button>
             </div>
           </form>
 
           <form className={showJobForm ? "hideJobForm" : ""}>
+          <h4>Select Questions</h4>
             <div>
+
+              
               {questions.map((item) => (
                 <label key={item} className="mb-3">
                   <input

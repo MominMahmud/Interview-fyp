@@ -583,9 +583,9 @@ def getID_cand(email):
 @cross_origin(supports_credentials=True)
 @app.route("/av", methods=["POST"])
 def insert_labels():
-    # v_id = request.json["id"]
-    # # fpath = v_id + ".mp4"
-    fpath = "123.mp4"
+    v_id = request.json["id"]
+    fpath = v_id + ".mp4"
+    
     print(fpath)
     (
         videoemotionlabels,
@@ -607,6 +607,7 @@ def insert_labels():
 
     try:
         labels = {
+            "id":v_id,
             "labelsV": videoemotionlabels,
             "valueV": videoemotionpercentages,
             "labelsA": audioemotionlabels,
