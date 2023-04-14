@@ -4,7 +4,7 @@ import Answers from "./qna/Answers";
 export default function Interview() {
   return (
     <div>
-      <Answers></Answers>
+      
     </div>
   );
 }

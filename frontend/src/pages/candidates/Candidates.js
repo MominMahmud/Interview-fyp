@@ -43,32 +43,19 @@ export default function Candidates() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width:768,
     bgcolor: "background.paper",
     border: "1px solid #000",
     boxShadow: 2,
     pt: 2,
     px: 4,
     pb: 3,
+    overflow:'scroll',
+    maxHeight: 500,
+    display:'block'
   };
-  const [chartData, setChartData] = useState({
-    labels: Data.map((data) => data.year),
-    datasets: [
-      {
-        label: "Users Gained ",
-        data: Data.map((data) => data.userGain),
-        backgroundColor: [
-          "rgba(75,192,192,1)",
-          "&quot;#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0",
-        ],
-        borderColor: "black",
-        borderWidth: 2,
-      },
-    ],
-  });
+  const [chartData, setChartData] = useState({});
+  const [chartData2, setChartData2] = useState({});
   const queryParameters = new URLSearchParams(window.location.search);
   const id = queryParameters.get("id");
   const [job, setJob] = useState("");
@@ -77,6 +64,8 @@ export default function Candidates() {
   var url2 = "http://localhost:90/candidates";
   url = url + "/" + id;
   console.log(url);
+
+  const [emotions,setEmotions]=useState({})
   useEffect(() => {
     axios
       .get(url)
@@ -89,7 +78,7 @@ export default function Candidates() {
         axios.get(url2).then((cand) => {
           setCandidates(cand.data);
         });
-      });
+      })
   }, []);
 
   console.log(candidates);
@@ -178,14 +167,64 @@ export default function Candidates() {
             .forEach(
               (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             );
-          setID(thisRow);
-          setCandidateResp(
-            candidates.filter(async (data) => {
-              return (await data._id) === candidateID._id;
-            })
-          );
+            axios.get('http://localhost:90/gav/'+thisRow._id,).then((res)=>{
 
-          setOpen(true);
+              setEmotions(res.data)
+              console.log(emotions,"3223")
+            }).then(()=>{
+
+              setChartData({
+                labels: emotions[0].labelsA,
+                datasets: [
+                  {
+                    label: "Audio Emotions",
+                    data: emotions[0].valuesA,
+                    backgroundColor: [
+                      "rgba(75,192,192,1)",
+                      "&quot;#ecf0f1",
+                      "#50AF95",
+                      "#f3ba2f",
+                      "#2a71d0",
+                      "red",
+                      "yellow"
+                    ],
+                    borderColor: "black",
+                    borderWidth: 2,
+                  },
+                ],
+
+                text:"Audio Emotions"
+              })
+              setChartData2({
+                labels: emotions[0].labelsV,
+                datasets: [
+                  {
+                    label: "Audio Emotions",
+                    data: emotions[0].valueV,
+                    backgroundColor: [
+                      "rgba(75,192,192,1)",
+                      "&quot;#ecf0f1",
+                      "#50AF95",
+                      "#f3ba2f",
+                      "#2a71d0",
+                      "red",
+                      "yellow"
+                    ],
+                    borderColor: "black",
+                    borderWidth: 2,
+                  },
+                ],
+
+                text:"Video Emotions"
+              })
+              
+
+            }).then(()=>{
+
+              setOpen(true);
+            })
+
+          
           return alert(JSON.stringify(thisRow._id, null, 4));
         };
 
@@ -200,8 +239,9 @@ export default function Candidates() {
               aria-labelledby="child-modal-title"
               aria-describedby="child-modal-description"
             >
-              <Box sx={{ width: 200, ...style }}>
+              <Box sx={{ width: 800, ...style }}>
                 <BarChart chartData={chartData}></BarChart>
+                <BarChart chartData={chartData2}></BarChart>
                 <p id="child-modal-description">{candidateID["res"]}</p>
                 <button className="btn btn-primary" onClick={handleClose}>
                   Close
