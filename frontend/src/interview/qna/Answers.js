@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
 import Question from "./Question";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -11,14 +12,14 @@ mic.continuous = true;
 mic.interimResults = true;
 mic.lang = "en-US";
 
-export default function App() {
+export default function Answers() {
   const [isRecording, setRecording] = useState(false);
   const [blobURL, setBlob] = useState("");
   const [isBlocked, setBlocked] = useState(false);
   const [note, setNote] = useState(null);
   const [savedNotes, setSavedNotes] = useState([]);
   var [nextQuestion, setNextQuestion] = useState(0);
-  let id = "123";
+  const {id}  = useParams()
   function start() {
     mic.start();
     mic.onend = () => {

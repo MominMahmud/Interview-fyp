@@ -308,6 +308,7 @@ def create_job():
             "skills": request.json["skills"],
             "edu": request.json["edu"],
             "exp": request.json["exp"],
+            "questions":request.json["questions"]
         }
         dbResponse = db.jobs.insert_one(job)
         # print(dbResponse.inserted_id)
@@ -466,7 +467,7 @@ def insert_questions():
         print(e)
 
 
-@app.route("/questions", methods=["GET"])
+@app.route("/getQuestions", methods=["GET"])
 def get_questions():
     try:
         question_Data = list(db.questions.find())

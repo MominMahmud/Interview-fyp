@@ -5,7 +5,8 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Candidates from "./pages/candidates/Candidates";
 import CreateJob from "./pages/JobApplication/CreateJob"
 import JobApplication from "./pages/JobApplication/JobApplication"
-import Interview from "./interview/Interview";
+
+import Answers from "./interview/qna/Answers";
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
             <Candidates />
           </Route>
           <Route path="/interview/:id">
-            <Interview></Interview>
+            <Answers></Answers>
           </Route>
           <Route path="/application">
             <JobApplication></JobApplication>
