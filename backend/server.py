@@ -7,8 +7,7 @@ from flask_cors import CORS, cross_origin
 from flask import Flask, render_template, request
 from flask_mail import Mail, Message
 import os
-
-
+from fpdf import FPDF
 from bson.objectid import ObjectId
 
 
@@ -204,13 +203,13 @@ def detect_leading_silence(sound, silence_threshold=-50.0, chunk_size=10):
 
 
 def audio_text_anlysis(address):
-    sound = AudioSegment.from_file("test.wav", format="wav")
+    #sound = AudioSegment.from_file("test.wav", format="wav")
+    myaudio= AudioSegment.from_file("test.wav", format="wav")
+    #start_trim = detect_leading_silence(sound)
+    #end_trim = detect_leading_silence(sound.reverse())
 
-    start_trim = detect_leading_silence(sound)
-    end_trim = detect_leading_silence(sound.reverse())
-
-    duration = len(sound)
-    myaudio = sound[start_trim : duration - end_trim]
+    #duration = len(sound)
+    #myaudio = sound[start_trim : duration - end_trim]
     silence = si.detect_silence(myaudio, min_silence_len=1000, silence_thresh=-40)
 
     silence = [
@@ -222,14 +221,21 @@ def audio_text_anlysis(address):
     for gap in silence:
         gaps.append(gap[1] - gap[0])
     total_silence_duration = sum(gaps)
-    total_speach_duration = sound.duration_seconds - total_silence_duration
-    speech_to_silence_ratio = total_speach_duration / total_silence_duration
-    audio_length_in_minutes = sound.duration_seconds / 60
-
+    total_speach_duration = myaudio.duration_seconds - total_silence_duration
+    if (total_silence_duration<=0):
+        speech_to_silence_ratio=0
+    else:
+        speech_to_silence_ratio = total_speach_duration / total_silence_duration
+    
+    audio_length_in_minutes = myaudio.duration_seconds / 60
+    Avg_silence_dur_per_minute=0
     print("Speech-to-silence ratio:", speech_to_silence_ratio)
     avg_silence_duration = np.mean(gaps)
     print("Average_silence duration:", avg_silence_duration)
-    Avg_silence_dur_per_minute = total_silence_duration / audio_length_in_minutes
+    if (total_silence_duration<=0):
+        Avg_silence_dur_per_minute=1.1
+    else:
+        Avg_silence_dur_per_minute = total_silence_duration / audio_length_in_minutes
     print("Average_silence duration per minute :", Avg_silence_dur_per_minute)
     recognizer = sr.Recognizer()
 
@@ -365,9 +371,9 @@ def insert_candidate():
             "ranking": request.json["ranking"],
             "score": request.json["score"],
             "appliedfor": request.json["appliedfor"],
-            "res": [],
+            
         }
-        candidate["res"].append(request.json["res"])
+        print(candidate)
         dbResponse = db.candidates.insert_one(candidate)
         # print(dbResponse.inserted_id)
         for attr in dir(dbResponse):
@@ -580,12 +586,112 @@ def getID_cand(email):
         )
 
 
+def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
+    class PDF(FPDF):
+        def header(self):
+            # Logo
+            self.image("logo2.png", 20, 10, 30)
+            # font
+            self.set_font("helvetica", "B", 20)
+            # Padding
+            self.cell(80)
+            # Title
+            self.cell(30, 10, "Report", border=True, ln=1, align="C")
+            # Line break
+            self.ln(20)
+
+        # Page footer
+        def footer(self):
+            # Set position of the footer
+            self.set_y(-15)
+            # set font
+            self.set_font("helvetica", "I", 8)
+            # Pageselfmber
+            self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
+
+        def body(self, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
+            # specself font
+            self.set_font("helvetica", "BIU", 20)
+            self.cell(0, 10, "Text:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, st, ln=1)
+            self.set_font("helvetica", "BIU", 20)
+            self.cell(0, 2, "High Level features:", ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "silence gaps:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(a), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Speech to Silence Ratio:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(b), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Average silence Duration:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(c), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Average_silence duration per minute :", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(d), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Number of unique words:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(e), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Unique words to total number of words ratio:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(f), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Rate of words per minute::", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(g), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Sentiment:", ln=1)
+            self.set_font("times", "", 12)
+            self.multi_cell(0, 10, str(h), ln=1)
+            self.set_font("helvetica", "BIU", 20)
+            self.cell(0, 10, "High Level Features:", ln=1)
+            self.set_font("helvetica", "BIU", 16)
+            self.cell(0, 10, "Facial Expression Emotions:", ln=1)
+            self.multi_cell(0, 10, str(via), ln=1)
+            self.multi_cell(0, 10, str(vib), ln=1)
+            #total = sum(vib)
+            #plt.bar(via, [v / total for v in vib], color="salmon")
+            #plt.gca().yaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
+            #plt.grid(axis="y")
+            #plt.savefig("plot.png")
+            #self.image("plot.png", x=None, y=None, w=0, h=0, type="", link="")
+            self.cell(0, 10, "Audio Emotion:", ln=1)
+            self.multi_cell(0, 10, str(aub), ln=1)
+            self.multi_cell(0, 10, str(aua), ln=1)
+            #total = sum(aua)
+            #plt.bar(aub, [v / total for v in aua], color="salmon")
+            #plt.gca().yaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
+            #plt.grid(axis="y")
+            #plt.savefig("plot1.png")
+            #self.image("plot1.png", x=None, y=None, w=0, h=0, type="", link="")
+
+    # Create a PDF object
+    pdf = PDF("P", "mm", "Letter")
+
+    # get total page numbers
+    pdf.alias_nb_pages()
+
+    # Set auto page break
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    # Add Page
+    pdf.add_page()
+    pdf.body(st, a, b, c, d, e, f, g, h, via, vib, aua, aub)
+    pdf.output(address)
+
+
 @cross_origin(supports_credentials=True)
 @app.route("/av", methods=["POST"])
 def insert_labels():
     v_id = request.json["id"]
     fpath = v_id + ".mp4"
-    
+
     print(fpath)
     (
         videoemotionlabels,
@@ -604,10 +710,25 @@ def insert_labels():
         rateWPM,
         sentiment,
     ) = audio_text_anlysis(fpath)
-
+    pdfcreator(
+        str(v_id) + ".pdf",
+        speakText,
+        silence,
+        StoSR,
+        avgSDUR,
+        avgSPM,
+        numUnique,
+        uniqueWords,
+        rateWPM,
+        sentiment,
+        videoemotionlabels,
+        videoemotionpercentages,
+        audioemotiopercentages,
+        audioemotionlabels,
+    )
     try:
         labels = {
-            "id":v_id,
+            "_id": v_id,
             "labelsV": videoemotionlabels,
             "valueV": videoemotionpercentages,
             "labelsA": audioemotionlabels,
@@ -640,6 +761,7 @@ def insert_labels():
 
 
 labelsGlobal = []
+
 
 
 @app.route("/gav/<id>", methods=["GET"])

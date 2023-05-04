@@ -6,7 +6,7 @@ function Question(props) {
   const [text, setText] = useState("");
   const { speak } = useSpeechSynthesis();
    useEffect(() => {
-    questions = []
+    setQuestions([])
     axios.get("http://localhost:90/getQuestions").then((res) => {
 
       //setQuestions(res.data);

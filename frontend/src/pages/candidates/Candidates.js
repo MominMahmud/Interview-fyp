@@ -81,12 +81,14 @@ export default function Candidates() {
       })
   }, []);
 
+  var emotionss
   console.log(candidates);
 
   //console.log(candidates[0].name)
   const [candidateID, setID] = useState({});
   const [candidateResp, setCandidateResp] = useState([{}]);
   const [open, setOpen] = React.useState(false);
+
 
   const handleClose = (params) => {
     console.log(params);
@@ -167,18 +169,19 @@ export default function Candidates() {
             .forEach(
               (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
             );
-            axios.get('http://localhost:90/gav/'+thisRow._id,).then((res)=>{
+            axios.get('http://localhost:90/gav/'+thisRow._id,).then( (res)=>{
 
+            console.log(res.data)
               setEmotions(res.data)
-              console.log(emotions,"3223")
-            }).then(()=>{
+               emotionss = res.data
+              console.log(emotions)
 
               setChartData({
-                labels: emotions[0].labelsA,
+                labels: emotions[0]?.labelsA,
                 datasets: [
                   {
                     label: "Audio Emotions",
-                    data: emotions[0].valuesA,
+                    data: emotions[0]?.valuesA,
                     backgroundColor: [
                       "rgba(75,192,192,1)",
                       "&quot;#ecf0f1",
@@ -196,11 +199,11 @@ export default function Candidates() {
                 text:"Audio Emotions"
               })
               setChartData2({
-                labels: emotions[0].labelsV,
+                labels: emotions[0]?.labelsV,
                 datasets: [
                   {
                     label: "Audio Emotions",
-                    data: emotions[0].valueV,
+                    data: emotions[0]?.valueV,
                     backgroundColor: [
                       "rgba(75,192,192,1)",
                       "&quot;#ecf0f1",
@@ -223,14 +226,16 @@ export default function Candidates() {
 
               setOpen(true);
             })
-
-          
-          return alert(JSON.stringify(thisRow._id, null, 4));
+          return ;
         };
 
         return (
           <div>
-            <button className="btn btn-primary" onClick={onClick}>
+            {
+              console.log('Data For Chart 2: ', chartData2)
+            }
+            <button className="btn btn-primary" onClick={onClick}
+              >
               Responses
             </button>
             <Modal
@@ -242,6 +247,18 @@ export default function Candidates() {
               <Box sx={{ width: 800, ...style }}>
                 <BarChart chartData={chartData}></BarChart>
                 <BarChart chartData={chartData2}></BarChart>
+                <h5>Silence Gaps:</h5> {emotions[0]?.silence.map((item)=>{
+
+                  return (<p>{item}</p>)
+                })}
+                <h5>Speech to Silence Ratio: </h5><p>{emotions[0]?.StoSR}</p>
+                <h5>Average silence Duration: </h5><p>{emotions[0]?.avgSDUR}</p>
+                <h5>Average silence duration per minute: </h5><p>{emotions[0]?.avgSPM}</p>
+                <h5>Number of unique words:</h5> <p>{emotions[0]?.numUnique}?</p>
+                <h5>Unique words to total number of words:</h5> <p>{emotions[0]?.uniqueWords}</p>
+                <h5>Rate of words per minute: </h5><p>{emotions[0]?.rateWPM}</p>
+                <h5>Sentiment:</h5> <p>{emotions[0]?.sentiment}</p>
+                
                 <p id="child-modal-description">{candidateID["res"]}</p>
                 <button className="btn btn-primary" onClick={handleClose}>
                   Close

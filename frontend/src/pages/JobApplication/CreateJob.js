@@ -6,19 +6,20 @@ import axios from "axios";
 export default function CreateJob() {
 
   var [questions, setQuestions] = useState([]);
+  const [state,setState] = useState(0);
   useEffect(() => {
-    questions = []
-    axios.get("http://localhost:90/getQuestions").then((res) => {
-      setQuestions([])
-      //setQuestions(res.data);
-      console.log(res.data);
-
-      for(let i =0;i<res.data.length;i++){
-        questions = [...questions, res.data[i].text]
-      }
-      setQuestions(questions);
-      console.log(questions)
-    });
+    if(state==0){
+      setState(1);
+      axios.get("http://localhost:90/getQuestions").
+      then((res) => {
+        const quest = [];
+        console.log('Response:',res.data);
+        for(let i =0;i<res.data.length;i++){
+          quest.push(res.data[i].text)
+        }
+        setQuestions(quest);
+      });
+    }
   },[])
   const [job, setJob] = useState({
     name: "",
@@ -66,7 +67,6 @@ export default function CreateJob() {
 
   return (
     <div>
-      
       <Box className="box-box">
         <div className="create-job">
           <form className={showJobForm ? "" : "hideJobForm"}>

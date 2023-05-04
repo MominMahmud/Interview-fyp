@@ -19,7 +19,7 @@ export default function JobApplication() {
     ranking: "0",
     score: "0",
     appliedfor: "",
-    res:[""]
+    
   });
   const handleInput = (e) => {
     const name = e.target.name;
@@ -29,6 +29,7 @@ export default function JobApplication() {
   };
   const handleSubmit = (e) => {
     
+    e.preventDefault()
     axios
       .post("http://localhost:90/candidates", {
         
@@ -40,12 +41,14 @@ export default function JobApplication() {
         ranking: candidate.ranking,
         score: candidate.score,
         appliedfor: candidate.appliedfor,
-        res:candidate.res
+        
       })
       .then(
-        axios.get("http://localhost:90/getC/" + candidate.email).then((res) => {
+        ()=>{
+          axios.get("http://localhost:90/getC/" + candidate.email).then((res) => {
           console.log(res);
         })
+        }
       );
     console.log(candidate);
   };
