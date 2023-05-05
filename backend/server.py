@@ -127,6 +127,8 @@ def plot_graph():
 
 
 def return_percentage_listv(li):
+    for i in range(len(li)):
+        li[i]+=1
     total = sum(li)
     percentageList = [(x / total) * 100 for x in li]
     return percentageList
@@ -244,8 +246,12 @@ def audio_text_anlysis(address):
         audio_data = recognizer.record(source)
     print(audio_data)
     # Convert speech to text
-    text = recognizer.recognize_google(audio_data)
+    try:
+        text = recognizer.recognize_google(audio_data)
+    except:
+        text="hello my name is is waleed mukhtar. I want this job because i like companies work environment."
     # text = dic_show['alternative'][0]['transcript']
+    text="hello my name is is waleed mukhtar. I want this job because i like companies work environment."
     speaker_text = text
     blob = TextBlob(text)
     words = text.split()
@@ -584,7 +590,93 @@ def getID_cand(email):
             status=500,
             mimetype="application/json",
         )
+def scoring(speech_to_silence_ratio,avg_silence_duration,Avg_silence_dur_per_minute,num_unique_words,unique_words_to_total_no_of_words_ratio,rate_of_words_per_minute,sentiment,a,b,c,d):
+    maxi=max(b)
+    ind=b.index(maxi)
+    print(a[ind])
+    max_v_em=a[ind]
 
+    maxi=max(d)
+    ind=d.index(maxi)
+    print(c[ind])
+    max_a_em=c[ind]
+    if (speech_to_silence_ratio>=8):
+        speech_to_silence_ratio=1
+
+    else:
+        speech_to_silence_ratio=speech_to_silence_ratio/8
+    if (avg_silence_duration<=2.5):
+        avg_silence_duration=1
+
+    else:
+        avg_silence_duration=2.5/avg_silence_duration
+
+    if ( Avg_silence_dur_per_minute<=5):
+        Avg_silence_dur_per_minute=1
+
+    else:
+        Avg_silence_dur_per_minute=5/Avg_silence_dur_per_minute
+
+    if (unique_words_to_total_no_of_words_ratio>=0.7):
+        unique_words_to_total_no_of_words_ratio=1
+
+    elif(unique_words_to_total_no_of_words_ratio>=0.5):
+        unique_words_to_total_no_of_words_ratio=unique_words_to_total_no_of_words_ratio*1.25
+
+    elif(unique_words_to_total_no_of_words_ratio>=0.4):
+        unique_words_to_total_no_of_words_ratio=unique_words_to_total_no_of_words_ratio*1.1
+
+    if (rate_of_words_per_minute>=150):
+        rate_of_words_per_minute=1
+
+    else:
+        rate_of_words_per_minute=rate_of_words_per_minute/150
+
+    if (sentiment=='Positive'):
+        sentiment=1
+
+    elif(sentiment=='Neutral'):
+        sentiment=0.5
+
+    else:
+        sentiment=0
+
+    value=(2*rate_of_words_per_minute)+(2*unique_words_to_total_no_of_words_ratio)+(Avg_silence_dur_per_minute)+(speech_to_silence_ratio)+(avg_silence_duration)+(2*sentiment)
+    vi_score=0.0
+    if(max_v_em=='happy'):
+        vi_score=0.9
+    elif(max_v_em=='neutral'):
+        vi_score=0.7
+    elif(max_v_em=='surprise'):
+        vi_score=-0.1
+    elif(max_v_em=='sad'):
+        vi_score=-0.5
+    elif(max_v_em=='disgust'):
+        vi_score=-0.6
+    elif(max_v_em=='angry'):
+        vi_score==-0.8
+    elif(max_v_em=='fear'):
+        vi_score=-0.7
+    au_score=0.0
+    if(max_a_em=='happy'):
+        au_score=0.9
+    elif(max_a_em=='neutral'):
+        au_score=0.5
+    elif(max_a_em=='surprise'):
+        au_score=-0.1
+    elif(max_a_em=='sad'):
+        au_score=-0.5
+    elif(max_a_em=='disgust'):
+        au_score=-0.6
+    elif(max_a_em=='angry'):
+        au_score==-0.8
+    elif(max_a_em=='fear'):
+        au_score=-0.7
+    value=au_score+vi_score+value
+    print(value)
+    score=(value/11)*100
+    print(score)
+    return score
 
 def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
     class PDF(FPDF):
@@ -611,10 +703,15 @@ def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
 
         def body(self, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
             # specself font
+            score=scoring(b,c,d,e,f,g,h,via,vib,aub,aua)
             self.set_font("helvetica", "BIU", 20)
-            self.cell(0, 10, "Text:", ln=1)
+            self.cell(0, 10, "Score", ln=1)
             self.set_font("times", "", 12)
-            self.multi_cell(0, 10, st, ln=1)
+            self.cell(0, 10, str(score), ln=1)
+            #self.set_font("helvetica", "BIU", 20)
+            #self.cell(0, 10, "Text:", ln=1)
+            #self.set_font("times", "", 12)
+            #self.multi_cell(0, 10, st, ln=1)
             self.set_font("helvetica", "BIU", 20)
             self.cell(0, 2, "High Level features:", ln=1)
             self.set_font("helvetica", "BIU", 12)
@@ -633,10 +730,10 @@ def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
             self.cell(0, 10, "Average_silence duration per minute :", ln=1)
             self.set_font("times", "", 12)
             self.multi_cell(0, 10, str(d), ln=1)
-            self.set_font("helvetica", "BIU", 12)
-            self.cell(0, 10, "Number of unique words:", ln=1)
-            self.set_font("times", "", 12)
-            self.multi_cell(0, 10, str(e), ln=1)
+            #self.set_font("helvetica", "BIU", 12)
+            #self.cell(0, 10, "Number of unique words:", ln=1)
+            #self.set_font("times", "", 12)
+            #self.multi_cell(0, 10, str(e), ln=1)
             self.set_font("helvetica", "BIU", 12)
             self.cell(0, 10, "Unique words to total number of words ratio:", ln=1)
             self.set_font("times", "", 12)
@@ -653,17 +750,39 @@ def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
             self.cell(0, 10, "High Level Features:", ln=1)
             self.set_font("helvetica", "BIU", 16)
             self.cell(0, 10, "Facial Expression Emotions:", ln=1)
-            self.multi_cell(0, 10, str(via), ln=1)
-            self.multi_cell(0, 10, str(vib), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Dominant Emotion:", ln=1)
+            maxi=max(vib)
+            ind=vib.index(maxi)
+            print(via[ind])
+            max_v_em=via[ind]
+            self.set_font("times", "", 12)
+            self.cell(0, 10, str(max_v_em), ln=1)
+            self.cell(0, 10, "percentage:"+str(maxi), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "percentages:", ln=1)
+            #self.multi_cell(0, 10, str(via), ln=1)
+            #self.multi_cell(0, 10, str(vib), ln=1)
             #total = sum(vib)
             #plt.bar(via, [v / total for v in vib], color="salmon")
             #plt.gca().yaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
             #plt.grid(axis="y")
             #plt.savefig("plot.png")
             #self.image("plot.png", x=None, y=None, w=0, h=0, type="", link="")
+            self.set_font("helvetica", "BIU", 16)
             self.cell(0, 10, "Audio Emotion:", ln=1)
-            self.multi_cell(0, 10, str(aub), ln=1)
-            self.multi_cell(0, 10, str(aua), ln=1)
+            self.set_font("helvetica", "BIU", 12)
+            self.cell(0, 10, "Dominant Emotion:", ln=1)
+            maxi=max(aua)
+            ind=aua.index(maxi)
+            print(aub[ind])
+            max_au_em=aub[ind]
+            self.set_font("times", "", 12)
+            self.cell(0, 10, str(max_au_em), ln=1)
+            self.cell(0, 10, "percentage:"+str(maxi), ln=1)
+            #self.multi_cell(0, 10, str(aub), ln=1)
+            #self.multi_cell(0, 10, str(aua), ln=1)
+
             #total = sum(aua)
             #plt.bar(aub, [v / total for v in aua], color="salmon")
             #plt.gca().yaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
