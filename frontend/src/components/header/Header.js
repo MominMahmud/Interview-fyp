@@ -7,7 +7,7 @@ export default function Header(props) {
   console.log(params)
   return (
     <div className="header">
-      <div className="headerText"> {props.head}</div>
+      <div className="headerText"> {props.header}</div>
     </div>
   );
 }
