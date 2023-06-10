@@ -2,11 +2,12 @@ import React, { useEffect, useState,useRef } from "react";
 import Question from "./Question";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
-
+import { ReactMediaRecorder } from 'react-media-recorder';
+import VideoPreview from "./VideoPreview";
 export default function Answers() {
 
   var [nextQuestion, setNextQuestion] = useState(0);
+  const [enable, setEnable] = useState(true);
   const videoRef = useRef(null);
   const [mediaStream, setMediaStream] = useState(null);
   const [recorder, setRecorder] = useState(null);
@@ -45,14 +46,15 @@ export default function Answers() {
     }
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (mediaBlobUrl) => {
     try {
-      const blob = new Blob(recordedChunks, { type: 'video/webm' });
-      const url = URL.createObjectURL(blob);
+      console.log(mediaBlobUrl)
+      // const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      // const url = URL.createObjectURL(blob);
 
       // Send the blob URL to the server using axios or fetch
       // ...
-      await axios.post('http://localhost:5000/api/convert', { blobUrl: url }).then((res)=>{
+      await axios.post('http://localhost:90/api/convert', { blobUrl: mediaBlobUrl }).then((res)=>{
 
       console.log(res)
       });
@@ -60,8 +62,8 @@ export default function Answers() {
 
       // Cleanup the recorded chunks and URL
 
-      setRecordedChunks([]);
-      URL.revokeObjectURL(url);
+      // setRecordedChunks([]);
+      // URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error uploading video:', error);
     }
@@ -80,20 +82,58 @@ export default function Answers() {
         }}>Next Question</button>
         {/* <button className="btn btn-danger" onClick={startRecording}>Start Recording</button>
         <button onClick={stopRecording} className="btn btn-primary">Stop Recording</button> */}
-        <div>
-          <video ref={videoRef} controls />
-          <button onClick={startRecording}>Start Recording</button>
-          <button onClick={stopRecording}>Stop Recording</button>
-          <button onClick={handleUpload}>Upload Video</button>
-        </div>
+      <div>
+        <ReactMediaRecorder
+          // video
+          // render={({ status, startRecording, stopRecording, mediaBlobUrl }) => (
+          //   <div>
+          //     <p>{status}</p>
+          //     <button onClick={startRecording}>Start Recording</button>
+          //     <button onClick={stopRecording}>Stop Recording</button>
+          //     <video src={mediaBlobUrl} controls autoPlay loop />
+          //   </div>
+          // )}
+          // audio
+          video
+          blobPropertyBag={{
+            type: 'video/webm',
+          }}
+          // askPermissionOnMount={true}
+          render={({
+            previewStream,
+            status,
+            startRecording,
+            stopRecording,
+            mediaBlobUrl,
+          }) => {
+            console.log(previewStream);
+            
+            return (
+              <div>
+                <p>{status}</p>
+                <button onClick={startRecording}>Start Recording</button>
+                <button onClick={()=>{
+                  stopRecording()
+                  handleUpload({mediaBlobUrl})
+                }}>Stop Recording</button>
+                <button
+                  onClick={() => {
+                    startRecording();
+                    setTimeout(stopRecording, 2000);
+                    setEnable(false);
+                  }}
+                >
+                  togglestreaming
+                </button>
+                {/* <audio src={mediaBlobUrl} controls autoPlay loop /> */}
+                
+                {enable && <VideoPreview stream={previewStream} />}
+              </div>
+            );
+          }}
+        />
+      </div>
 
-        {/* <a className="btn btn-success"ref={downloadRef} onClick={onSubmit}>Save</a>
-      
-        <video ref={videoRef} width="340" height="280" />  */}
-
-      
-
-      
       </div>
     </div>
   )
