@@ -8,6 +8,6 @@ const requests={
     setEmotions:api+'/setEmotions',
     createCandidate:api+'/candidates',
     getCandidateEmail:api+'/getC',
-    getQuestionsById:api+'/getQuestionsByJob'
+    getQuestionsByJob:api+'/getQuestionsByJob'
 }
 export default requests

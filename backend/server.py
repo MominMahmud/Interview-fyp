@@ -576,10 +576,10 @@ def get_specificjobs():
 @app.route('/getQuestionsByJob/<id>', methods=['GET'])
 def getJobById(id):
     try:
-        jobId = list(db.candidates.find({'_id':ObjectId(id)},{'_id':1}))
-        print(jobId)
+        job = list(db.candidates.find({'_id':ObjectId(id)},{'_id':0,'appliedfor':1}))
+        print(job[0])
 
-        questions = list(db.jobs.find({'_id':jobId[0]['_id']},{'questions':1,'_id':0}))
+        questions = list(db.jobs.find({'name':job[0]['appliedfor']},{'questions':1,'_id':0}))
         return Response(
             response=json.dumps(questions[0]),
             status=200,
