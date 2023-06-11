@@ -10,7 +10,7 @@ function VideoPreview  ({ stream }) {
     if (!stream) {
       return null;
     }
-    return <video ref={videoRef} width={500} height={500} autoPlay controls />;
+    return <video ref={videoRef} width={300} height={300} autoPlay controls />;
 
 }
 export default VideoPreview
