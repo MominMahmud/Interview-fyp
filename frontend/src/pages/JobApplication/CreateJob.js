@@ -3,6 +3,7 @@ import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
+import requests from '../../config'
 export default function CreateJob() {
 
   var [questions, setQuestions] = useState([]);
@@ -10,7 +11,7 @@ export default function CreateJob() {
   useEffect(() => {
     if(state==0){
       setState(1);
-      axios.get("http://localhost:90/getQuestions").
+      axios.get(requests.getQuestions).
       then((res) => {
         const quest = [];
         console.log('Response:',res.data);
@@ -30,6 +31,7 @@ export default function CreateJob() {
     
   });
   const [jobs, setJobs] = useState([]);
+  const [invalid,setInvalid]=useState("")
   const handleInput = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -44,7 +46,7 @@ export default function CreateJob() {
       id: new Date().getTime().toString(),
     };
     setJobs([...jobs, job]);
-    axios.post("http://localhost:90/createjobs", {
+    axios.post(requests.createJobs, {
       name: job.name,
       desc: job.desc,
       skills: job.skills,
@@ -58,7 +60,15 @@ export default function CreateJob() {
   const [showJobForm, setShowJobForm] = useState(true);
   function setQuestionsToTrue(e) {
     e.preventDefault();
-    setShowJobForm(false);
+    
+    if(job.name && job.desc && job.skills && job.edu && job.exp){
+      setShowJobForm(false);
+      setInvalid("")
+    }
+    else{
+
+      setInvalid("Please fill all the fields")
+    }
     console.log(showJobForm);
   }
 
@@ -67,11 +77,11 @@ export default function CreateJob() {
 
   return (
     <div>
-      <Box className="box-box">
+      <Box className="box-box mt-4">
         <div className="create-job">
           <form className={showJobForm ? "" : "hideJobForm"}>
             <div className="row">
-              <div>
+              <div className="my-1">
                 <label htmlform="name">Name</label>
                 <input
                   className="col-12"
@@ -82,7 +92,7 @@ export default function CreateJob() {
                   id="name"
                 />
               </div>
-              <div>
+              <div className="my-1">
                 <label htmlform="desc">Description</label>
                 <textarea
                   className="col-12"
@@ -93,7 +103,7 @@ export default function CreateJob() {
                   id="desc"
                 />
               </div>
-              <div>
+              <div className="my-1">
                 <label htmlform="skills">Skills</label>
                 <input
                   className="col-12"
@@ -104,7 +114,7 @@ export default function CreateJob() {
                   id="skills"
                 />
               </div>
-              <div>
+              <div className="my-1">
                 <label htmlform="edu">Education</label>
                 <input
                   className="col-12"
@@ -115,7 +125,7 @@ export default function CreateJob() {
                   id="edu"
                 />
               </div>
-              <div>
+              <div className="my-1">
                 <label htmlform="exp">Experience</label>
                 <input
                   className="col-12"
@@ -127,7 +137,11 @@ export default function CreateJob() {
                 />
               </div>
             </div>
-            <div className="my-3 d-flex flex-row-reverse">
+
+            <div className="my-3 d-flex justify-content-between">
+            <div className="text-danger">
+              {invalid}
+            </div>
               <button className="btn btn-primary " onClick={setQuestionsToTrue}>
                 Next
               </button>

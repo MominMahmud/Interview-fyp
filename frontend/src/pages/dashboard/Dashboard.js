@@ -2,34 +2,36 @@ import React from "react";
 import Card from "../../components/card/Card";
 import { useState, useEffect } from "react";
 import axios from 'axios'
+import requests from '../../config'
+
 export default function Dashboard() {
   const [jobss, setMyJobs] = useState([]);
+  const [searchVal, setSearchVal] = useState("");
+  const [filteredJobs, setFilteredJobs] = useState([])
+  function handleSearchClick() {
+    console.log(searchVal)
+    if (searchVal === "") { setFilteredJobs(jobss); return; }
+    const filterBySearch = jobss.filter((item) => {
+      if (item.name.toLowerCase()
+        .includes(searchVal.toLowerCase())) { return item; }
+    })
+    setFilteredJobs(filterBySearch);
+  }
+  function handleResetClick() {
+
+    setFilteredJobs(jobss)
+  }
+  useEffect(()=>{
+    handleSearchClick()
+
+  },[searchVal])
   useEffect(() => {
-    axios.get("http://localhost:90/jobs").then((res) => {
+    axios.get(requests.getJobs).then((res) => {
       console.log(res);
-      setMyJobs(res.data);
+      setMyJobs(res.data.reverse());
+      setFilteredJobs(res.data.reverse().reverse())
     });
   }, []);
-
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
-  };
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   const handleClick = () => {
     window.open("/create/job");
 
@@ -37,9 +39,21 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard">
-      <button className="btn btn-outline-success" onClick={handleClick}>Create</button>
+      <div class="row justify-content-between">
+        <div class="col-6 d-flex">
+          <input className="form-control" placeholder="Search.." value={searchVal} onChange={(e) => {
+            setSearchVal(e.target.value)
+            
+          }}></input>
+          <button className="mx-3 btn btn-success" onClick={handleSearchClick}>Go</button>
+          <button className="btn btn-outline-primary" onClick={handleResetClick}>Reset</button>
+        </div>
+        <div class="col-3 " >
+          <button className="btn btn-outline-success" onClick={handleClick}>Create</button>
+        </div>
+      </div>
       <div className="row">
-        {jobss.map((post) => {
+        {filteredJobs.map((post) => {
           const { _id, name, desc, skills, edu, exp } = post;
           return (
             <div class="card">

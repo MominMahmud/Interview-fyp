@@ -1,23 +1,23 @@
 import { useSpeechSynthesis } from 'react-speech-kit';
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
+import requests from '../../config';
 function Question(props) {
   var [questions, setQuestions] = useState([]);
   const [text, setText] = useState("");
   const { speak } = useSpeechSynthesis();
-   useEffect(() => {
+  useEffect(() => {
     setQuestions([])
-    axios.get("http://localhost:90/getQuestions").then((res) => {
-
-      //setQuestions(res.data);
-      console.log(res.data);
-
-      for(let i =0;i<res.data.length;i++){
-        questions = [...questions, res.data[i].text]
+    axios.get(requests.getQuestionsByJob+'/'+props.id).then((res)=>{
+      console.log(res)
+      for(let i =0;i<res?.data?.questions.length;i++){
+        questions = [...questions, res?.data?.questions[i]]
       }
       setQuestions(questions);
-      console.log(questions)
-    });
+      
+    })
+    console.log(questions)
+
   },[]);
 
 
