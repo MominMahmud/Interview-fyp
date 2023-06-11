@@ -3,6 +3,7 @@ import Card from "../../components/card/Card";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
+import requests from '../../config'
 export default function CreateJob() {
 
   var [questions, setQuestions] = useState([]);
@@ -10,7 +11,7 @@ export default function CreateJob() {
   useEffect(() => {
     if(state==0){
       setState(1);
-      axios.get("http://localhost:90/getQuestions").
+      axios.get(requests.getQuestions).
       then((res) => {
         const quest = [];
         console.log('Response:',res.data);
@@ -44,7 +45,7 @@ export default function CreateJob() {
       id: new Date().getTime().toString(),
     };
     setJobs([...jobs, job]);
-    axios.post("http://localhost:90/createjobs", {
+    axios.post(requests.createJobs, {
       name: job.name,
       desc: job.desc,
       skills: job.skills,

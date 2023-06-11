@@ -8,62 +8,25 @@ export default function Answers() {
 
   var [nextQuestion, setNextQuestion] = useState(0);
   const [enable, setEnable] = useState(true);
-  const videoRef = useRef(null);
-  const [mediaStream, setMediaStream] = useState(null);
-  const [recorder, setRecorder] = useState(null);
-  const [recordedChunks, setRecordedChunks] = useState([]);
-
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-      });
-      setMediaStream(stream);
-      videoRef.current.srcObject = stream;
-      const options = { audioBitsPerSecond: 128000 }; // Adjust the bit rate as needed
-
-      const mediaRecorder = new MediaRecorder(stream, options);
-      setRecorder(mediaRecorder);
-
-      mediaRecorder.addEventListener('dataavailable', handleDataAvailable);
-      mediaRecorder.start();
-    } catch (error) {
-      console.error('Error starting recording:', error);
-    }
-  };
-
-  const stopRecording = () => {
-    if (recorder && recorder.state === 'recording') {
-      recorder.stop();
-      mediaStream.getTracks().forEach((track) => track.stop());
-    }
-  };
-
-  const handleDataAvailable = (event) => {
-    if (event.data.size > 0) {
-      setRecordedChunks((prevChunks) => [...prevChunks, event.data]);
-    }
-  };
+  const { id } = useParams()
 
   const handleUpload = async (mediaBlobUrl) => {
+    
+
+    let blob = await fetch(mediaBlobUrl['mediaBlobUrl']).then(r => r.blob());
+    let data =  new FormData()
+    data.append('file',blob,id)
     try {
-      console.log(mediaBlobUrl)
-      // const blob = new Blob(recordedChunks, { type: 'video/webm' });
-      // const url = URL.createObjectURL(blob);
-
-      // Send the blob URL to the server using axios or fetch
-      // ...
-      await axios.post('http://localhost:90/api/convert', { blobUrl: mediaBlobUrl }).then((res)=>{
-
-      console.log(res)
-      });
+        await axios.post('http://localhost:90/setEmotions',data).then((res)=>{
+        console.log(res)
+        // Perform further operations with the Blob object
+      })
+      
+      
+ 
+      
       console.log('Upload successful');
 
-      // Cleanup the recorded chunks and URL
-
-      // setRecordedChunks([]);
-      // URL.revokeObjectURL(url);
     } catch (error) {
       console.error('Error uploading video:', error);
     }
@@ -76,7 +39,7 @@ export default function Answers() {
       
       <div className="interview-section">
         <div className="section"></div>
-        <Question index={nextQuestion}></Question>
+        <Question index={nextQuestion} id = {id}></Question>
         <button className="btn btn-primary"onClick={()=>{
         setNextQuestion(nextQuestion+1)
         }}>Next Question</button>
@@ -114,8 +77,14 @@ export default function Answers() {
                 <button onClick={startRecording}>Start Recording</button>
                 <button onClick={()=>{
                   stopRecording()
-                  handleUpload({mediaBlobUrl})
                 }}>Stop Recording</button>
+                <button onClick={()=>{
+
+                  handleUpload({mediaBlobUrl})
+                }}>
+                  Save
+
+                </button>
                 <button
                   onClick={() => {
                     startRecording();
@@ -126,7 +95,6 @@ export default function Answers() {
                   togglestreaming
                 </button>
                 {/* <audio src={mediaBlobUrl} controls autoPlay loop /> */}
-                
                 {enable && <VideoPreview stream={previewStream} />}
               </div>
             );

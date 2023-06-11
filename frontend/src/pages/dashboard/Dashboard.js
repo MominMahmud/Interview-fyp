@@ -2,10 +2,12 @@ import React from "react";
 import Card from "../../components/card/Card";
 import { useState, useEffect } from "react";
 import axios from 'axios'
+import requests from '../../config'
+
 export default function Dashboard() {
   const [jobss, setMyJobs] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:90/jobs").then((res) => {
+    axios.get(requests.getJobs).then((res) => {
       console.log(res);
       setMyJobs(res.data);
     });

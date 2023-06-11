@@ -9,6 +9,7 @@ from flask_mail import Mail, Message
 import os
 from fpdf import FPDF
 from bson.objectid import ObjectId
+import requests
 
 
 from sklearn.preprocessing import OneHotEncoder
@@ -251,7 +252,6 @@ def audio_text_anlysis(address):
     except:
         text="hello my name is is waleed mukhtar. I want this job because i like companies work environment."
     # text = dic_show['alternative'][0]['transcript']
-    text="hello my name is is waleed mukhtar. I want this job because i like companies work environment."
     speaker_text = text
     blob = TextBlob(text)
     words = text.split()
@@ -360,6 +360,24 @@ def get_jobs():
         print(e)
         return Response(
             response=json.dumps({"message": "Cannot read job"}),
+            status=500,
+            mimetype="application/json",
+        )
+
+@app.route('/getQuestionsByJobId/<id>',methods=['get'])
+def getQuestionsByJobId(id):
+    try:
+        job = list(db.jobs.find({'_id':ObjectId(id)},{"questions":1,'_id':0}))
+        return Response(
+            response=json.dumps(job[0]),
+            status=200,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot update user"}),
             status=500,
             mimetype="application/json",
         )
@@ -555,6 +573,26 @@ def get_specificjobs():
             mimetype="application/json",
         )
 
+@app.route('/getQuestionsByJob/<id>', methods=['GET'])
+def getJobById(id):
+    try:
+        jobId = list(db.candidates.find({'_id':ObjectId(id)},{'_id':1}))
+        print(jobId)
+
+        questions = list(db.jobs.find({'_id':jobId[0]['_id']},{'questions':1,'_id':0}))
+        return Response(
+            response=json.dumps(questions[0]),
+            status=200,
+            mimetype="application/json",
+        )
+
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot update user"}),
+            status=500,
+            mimetype="application/json",
+        )
 
 @app.route("/getC/<email>", methods=["GET", "POST"])
 # @cross_origin()
@@ -805,78 +843,78 @@ def pdfcreator(address, st, a, b, c, d, e, f, g, h, via, vib, aua, aub):
     pdf.output(address)
 
 
-@cross_origin(supports_credentials=True)
-@app.route("/av", methods=["POST"])
-def insert_labels():
-    v_id = request.json["id"]
-    fpath = v_id + ".mp4"
+# @cross_origin(supports_credentials=True)
+# @app.route("/av", methods=["POST"])
+# # def insert_labels():
+#     v_id = request.json["id"]
+#     fpath = v_id + ".mp4"
 
-    print(fpath)
-    (
-        videoemotionlabels,
-        videoemotionpercentages,
-        audioemotiopercentages,
-        audioemotionlabels,
-    ) = audioVideoEmotion(fpath)
-    (
-        speakText,
-        silence,
-        StoSR,
-        avgSDUR,
-        avgSPM,
-        numUnique,
-        uniqueWords,
-        rateWPM,
-        sentiment,
-    ) = audio_text_anlysis(fpath)
-    pdfcreator(
-        str(v_id) + ".pdf",
-        speakText,
-        silence,
-        StoSR,
-        avgSDUR,
-        avgSPM,
-        numUnique,
-        uniqueWords,
-        rateWPM,
-        sentiment,
-        videoemotionlabels,
-        videoemotionpercentages,
-        audioemotiopercentages,
-        audioemotionlabels,
-    )
-    try:
-        labels = {
-            "_id": v_id,
-            "labelsV": videoemotionlabels,
-            "valueV": videoemotionpercentages,
-            "labelsA": audioemotionlabels,
-            "valuesA": audioemotiopercentages,
-            "labelsV": videoemotionlabels,
-            "valueV": videoemotionpercentages,
-            "labelsA": audioemotionlabels,
-            "valuesA": audioemotiopercentages,
-            "speakerText": speakText,
-            "silence": silence,
-            "StoSR": StoSR,
-            "avgSDUR": avgSDUR,
-            "avgSPM": avgSPM,
-            "numUnique": numUnique,
-            "uniqueWords": uniqueWords,
-            "rateWPM": rateWPM,
-            "sentiment": sentiment,
-        }
-        print(labels)
-        dbResponse = db.labels.insert_one(labels)
-        return Response(
-            response=json.dumps(
-                {"message": "Label Inserted", "id": f"{dbResponse.inserted_id}"}
-            ),
-            status=200,
-            mimetype="application/json",
-        )
-    except Exception as e:
-        print(e)
+#     print(fpath)
+#     (
+#         videoemotionlabels,
+#         videoemotionpercentages,
+#         audioemotiopercentages,
+#         audioemotionlabels,
+#     ) = audioVideoEmotion(fpath)
+#     (
+#         speakText,
+#         silence,
+#         StoSR,
+#         avgSDUR,
+#         avgSPM,
+#         numUnique,
+#         uniqueWords,
+#         rateWPM,
+#         sentiment,
+#     ) = audio_text_anlysis(fpath)
+#     pdfcreator(
+#         str(v_id) + ".pdf",
+#         speakText,
+#         silence,
+#         StoSR,
+#         avgSDUR,
+#         avgSPM,
+#         numUnique,
+#         uniqueWords,
+#         rateWPM,
+#         sentiment,
+#         videoemotionlabels,
+#         videoemotionpercentages,
+#         audioemotiopercentages,
+#         audioemotionlabels,
+#     )
+#     try:
+#         labels = {
+#             "_id": v_id,
+#             "labelsV": videoemotionlabels,
+#             "valueV": videoemotionpercentages,
+#             "labelsA": audioemotionlabels,
+#             "valuesA": audioemotiopercentages,
+#             "labelsV": videoemotionlabels,
+#             "valueV": videoemotionpercentages,
+#             "labelsA": audioemotionlabels,
+#             "valuesA": audioemotiopercentages,
+#             "speakerText": speakText,
+#             "silence": silence,
+#             "StoSR": StoSR,
+#             "avgSDUR": avgSDUR,
+#             "avgSPM": avgSPM,
+#             "numUnique": numUnique,
+#             "uniqueWords": uniqueWords,
+#             "rateWPM": rateWPM,
+#             "sentiment": sentiment,
+#         }
+#         print(labels)
+#         dbResponse = db.labels.insert_one(labels)
+#         return Response(
+#             response=json.dumps(
+#                 {"message": "Label Inserted", "id": f"{dbResponse.inserted_id}"}
+#             ),
+#             status=200,
+#             mimetype="application/json",
+#         )
+#     except Exception as e:
+#         print(e)
 
 
 labelsGlobal = []
@@ -963,13 +1001,83 @@ def get_labels(id):
 #     except Exception as e:
 #         print(e)
 
-@app.route('/api/convert', methods=['POST'])
+@app.route('/setEmotions', methods=['POST'])
 def convert_video():
-    blob_url = request.json.get('blobUrl')
-    # Convert the blob_url to a video using your desired method
-    
+    r = request.files
+    print(r)
+    file = r.get('file')
+    file.save(file.filename+'.webm')
+    fpath = file.filename + ".webm"
 
-    return blob_url
+    print(fpath)
+    (
+        videoemotionlabels,
+        videoemotionpercentages,
+        audioemotiopercentages,
+        audioemotionlabels,
+    ) = audioVideoEmotion(fpath)
+    (
+        speakText,
+        silence,
+        StoSR,
+        avgSDUR,
+        avgSPM,
+        numUnique,
+        uniqueWords,
+        rateWPM,
+        sentiment,
+    ) = audio_text_anlysis(fpath)
+    pdfcreator(
+        file.filename + ".pdf",
+        speakText,
+        silence,
+        StoSR,
+        avgSDUR,
+        avgSPM,
+        numUnique,
+        uniqueWords,
+        rateWPM,
+        sentiment,
+        videoemotionlabels,
+        videoemotionpercentages,
+        audioemotiopercentages,
+        audioemotionlabels,
+    )
+    try:
+        labels = {
+            "_id": file.filename,
+            "labelsV": videoemotionlabels,
+            "valueV": videoemotionpercentages,
+            "labelsA": audioemotionlabels,
+            "valuesA": audioemotiopercentages,
+            "labelsV": videoemotionlabels,
+            "valueV": videoemotionpercentages,
+            "labelsA": audioemotionlabels,
+            "valuesA": audioemotiopercentages,
+            "speakerText": speakText,
+            "silence": silence,
+            "StoSR": StoSR,
+            "avgSDUR": avgSDUR,
+            "avgSPM": avgSPM,
+            "numUnique": numUnique,
+            "uniqueWords": uniqueWords,
+            "rateWPM": rateWPM,
+            "sentiment": sentiment,
+        }
+        print(labels)
+        dbResponse = db.labels.insert_one(labels)
+        return Response(
+            response=json.dumps(
+                {"message": "Label Inserted", "id": f"{dbResponse.inserted_id}"}
+            ),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        print(e)
+
+
+    return "Success"
 
 if __name__ == "__main__":
     app.run(port=90, debug=True)

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import requests from '../../config'
 
 export default function JobApplication() {
   const [jobs, setMyJobs] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:90/jobs").then((res) => {
+    axios.get(requests.getJobs).then((res) => {
       console.log(res);
       setMyJobs(res.data);
     });
@@ -31,7 +32,7 @@ export default function JobApplication() {
     
     e.preventDefault()
     axios
-      .post("http://localhost:90/candidates", {
+      .post(requests.createCandidate, {
         
         name: candidate.name,
         email: candidate.email,
@@ -45,7 +46,7 @@ export default function JobApplication() {
       })
       .then(
         ()=>{
-          axios.get("http://localhost:90/getC/" + candidate.email).then((res) => {
+          axios.get(requests.getCandidateEmail +'/'+ candidate.email).then((res) => {
           console.log(res);
         })
         }
