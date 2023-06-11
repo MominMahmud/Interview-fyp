@@ -85,8 +85,20 @@ export default function Answers() {
                   Save
 
                 </button>
-                <video src={mediaBlobUrl} controls autoPlay loop />
+                <button
+                  onClick={() => {
+                    startRecording();
+                    setTimeout(stopRecording, 2000);
+                    setEnable(false);
+                  }}
+                >
+                  togglestreaming
+                </button>
+                {/* <audio src={mediaBlobUrl} controls autoPlay loop /> */}
+                {/* <video src={mediaBlobUrl} controls autoPlay loop /> */}
+                
                 {enable && <VideoPreview stream={previewStream} />}
+                
               </div>
             );
           }}
