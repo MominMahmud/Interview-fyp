@@ -4,6 +4,7 @@ import requests from '../../config'
 
 export default function JobApplication() {
   const [jobs, setMyJobs] = useState([]);
+  const [invalid, setInvalid] = useState("")
   useEffect(() => {
     axios.get(requests.getJobs).then((res) => {
       console.log(res);
@@ -11,7 +12,7 @@ export default function JobApplication() {
     });
   }, []);
   const [candidate, setCandidate] = useState({
-    
+
     name: "",
     email: "",
     age: "",
@@ -20,7 +21,7 @@ export default function JobApplication() {
     ranking: "0",
     score: "0",
     appliedfor: "",
-    
+
   });
   const handleInput = (e) => {
     const name = e.target.name;
@@ -29,29 +30,36 @@ export default function JobApplication() {
     setCandidate({ ...candidate, [name]: value });
   };
   const handleSubmit = (e) => {
-    
-    e.preventDefault()
-    axios
-      .post(requests.createCandidate, {
-        
-        name: candidate.name,
-        email: candidate.email,
-        age: candidate.age,
-        experience: candidate.experience,
-        status: candidate.status,
-        ranking: candidate.ranking,
-        score: candidate.score,
-        appliedfor: candidate.appliedfor,
-        
-      })
-      .then(
-        ()=>{
-          axios.get(requests.getCandidateEmail +'/'+ candidate.email).then((res) => {
-          console.log(res);
+    if (candidate.name && candidate.email && candidate.age && candidate.experience &&
+      candidate.experience && candidate.appliedfor) {
+
+      setInvalid("")
+
+      axios
+        .post(requests.createCandidate, {
+          name: candidate.name,
+          email: candidate.email,
+          age: candidate.age,
+          experience: candidate.experience,
+          status: candidate.status,
+          ranking: candidate.ranking,
+          score: candidate.score,
+          appliedfor: candidate.appliedfor,
+
         })
-        }
-      );
-    console.log(candidate);
+        .then(
+          () => {
+            axios.get(requests.getCandidateEmail + '/' + candidate.email).then((res) => {
+              console.log(res);
+            })
+          }
+        );
+      console.log(candidate);
+    }
+    else {
+      setInvalid("Please fill all the details..")
+      e.preventDefault()
+    }
   };
   return (
     <>
@@ -121,9 +129,14 @@ export default function JobApplication() {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary w-25 mt-4">
-              Apply
-            </button>
+            <div className='d-flex justify-content-between align-items-center'>
+              <button type="submit" className="btn btn-primary w-25 mt-4">
+                Apply
+              </button>
+              <div className="text-danger">
+                {invalid}
+              </div>
+            </div>
           </div>
         </form>
       </div>
